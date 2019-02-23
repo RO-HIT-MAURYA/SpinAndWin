@@ -1,10 +1,14 @@
 package rm.spinandwin;
 
+import android.app.Dialog;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,18 +26,24 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class LogInActivity extends AppCompatActivity {
+import rm.spinandwin.helper.Api;
+import rm.spinandwin.helper.H;
+import rm.spinandwin.helper.Json;
+import rm.spinandwin.helper.LoadingDialog;
+import rm.spinandwin.helper.Static;
+
+import static android.os.Build.VERSION_CODES.P;
+
+public class LogInActivity extends AppCompatActivity
+{
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        loadingDialog = new LoadingDialog(this);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,65 +56,72 @@ public class LogInActivity extends AppCompatActivity {
 
     private void setUpJson()
     {
-        JSONObject jsonObject = new JSONObject();
-        String userName= ((EditText)findViewById(R.id.userName)).getText().toString().trim();
-        if (userName.isEmpty()) {
+        Json json = new Json();
+        String string= ((EditText)findViewById(R.id.userName)).getText().toString().trim();
+        if (string.isEmpty()) {
             Toast.makeText(LogInActivity.this, "Username is mandatory.", Toast.LENGTH_SHORT).show();
             return;
         }
-        else if (userName.length()>1 && userName.length()<10) {
+        else if (string.length()>1 && string.length()<10) {
             Toast.makeText(LogInActivity.this, "Enter valid user name", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String pass = ((EditText)findViewById(R.id.password)).getText().toString().trim();
-        if (pass.isEmpty()) {
+        json.addString("login_id",string);
+
+        string = ((EditText)findViewById(R.id.password)).getText().toString().trim();
+        if (string.isEmpty()) {
             Toast.makeText(LogInActivity.this, "Password is mandatory.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        try {
-            jsonObject.put("login_id",userName);
-            jsonObject.put("login_password",pass);
-            hitApi(jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        json.addString("login_password",string);
+
+        //hitLogInApi(json);
+        otpPopUp();
     }
 
-    private void hitApi(JSONObject jsonObject)
+    private void otpPopUp() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.otp_dialog);
+        dialog.show();
+        dialog.setCancelable(false);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.hide();
+            }
+        },7000);
+    }
+
+    private void hitLogInApi(Json json)
     {
-        Log.e("requestBodyIs",jsonObject+"");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://apispinwheel.spinwheels.info/GamerLogin"
-                , jsonObject, new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                Log.e("responseIs",""+response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Log.e("errorIs",""+error);
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-//                headers.put("Accept", "application/json");
-                return headers;
-            }//get headers
-        };
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                2000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        RequestQueue requestQueue = Volley.newRequestQueue(LogInActivity.this);
-        requestQueue.add(jsonObjectRequest);
+        Api.newApi(this, Static.baseUrl + "GamerLogin").addJson(json)
+                .setMethod(Api.POST)
+                .onLoading(new Api.OnLoadingListener() {
+                    @Override
+                    public void onLoading(boolean isLoading) {
+                        if (isLoading)
+                            loadingDialog.show("loading...");
+                        else
+                            loadingDialog.dismiss();
+                    }
+                })
+                .onError(new Api.OnErrorListener() {
+                    @Override
+                    public void onError() {
+                        H.showMessage(LogInActivity.this, "Something went wrong.");
+                    }
+                })
+                .onSuccess(new Api.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Json json)
+                    {
+                        H.log("jsonIs",""+json);
+                    }
+                })
+                .run("logIn");
     }
 }
