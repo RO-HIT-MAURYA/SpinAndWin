@@ -66,6 +66,7 @@
                 android:inputType="numberPassword"
                 android:hint="********"
                 android:padding="8dp"
+                android:imeOptions="actionDone"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/et_bg"/>
 
