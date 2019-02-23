@@ -9,4 +9,9 @@
     <color name="black1">#616161</color>
     <color name="black2">#424242</color>
     <color name="black3">#757575</color>
+    <color name="grey">#fafafa</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="transparent_Semi">#29000000</color>
+
 </resources>

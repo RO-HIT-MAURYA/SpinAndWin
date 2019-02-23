@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SpinAndWin</string>
+    <dimen name="right_margin">5dp</dimen>
+    <dimen name="top_text_size">10sp</dimen>
+    <dimen name="text_margin">1dp</dimen>
+
 </resources>
