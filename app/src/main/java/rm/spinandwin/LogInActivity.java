@@ -95,7 +95,6 @@ public class LogInActivity extends AppCompatActivity {
                                 session.addString(Static.data, json + "");
                                 startActivity(new Intent(LogInActivity.this,MainActivity.class));
                                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-                                finish();
                             }
                         } else
                             H.showMessage(LogInActivity.this, json.getString(Static.message));

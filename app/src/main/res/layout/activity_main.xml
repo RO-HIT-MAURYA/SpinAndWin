@@ -29,7 +29,7 @@
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:src="@drawable/casino" />
+            android:src="@drawable/spinner" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -450,9 +450,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
-                android:layout_weight="1.7"
-                android:background="@drawable/ripple"
-                android:clickable="true">
+                android:layout_weight="1.7">
 
                 <TextView
                     android:id="@+id/transfer"
@@ -460,6 +458,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Transfer"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
                     android:onClick="onRowOneClick"
                     android:textColor="@color/white"
                     android:textSize="@dimen/top_text_size" />
@@ -470,16 +470,17 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
-                android:layout_weight="1.7"
-                android:background="@drawable/ripple"
-                android:clickable="true">
+                android:layout_weight="1.7">
 
                 <TextView
                     android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:background="@drawable/ripple"
                     android:text="Logout"
+                    android:clickable="true"
+                    android:onClick="onRowOneClick"
                     android:textColor="@color/white"
                     android:textSize="@dimen/top_text_size" />
 

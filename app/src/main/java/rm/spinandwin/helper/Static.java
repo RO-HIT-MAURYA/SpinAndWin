@@ -11,7 +11,12 @@ public class Static {
     public static String data = "data";
     public static final String IsFirstTimeLogin = "IsFirstTimeLogin";
     public static final String OTP = "OTP";
-
-
+    public static final String TotalCoins  = "TotalCoins";
+    public static final String UserId = "UserId";
+    public static final String AssignedUserId = "AssignedDUserId";
     public static String message = "message";
+    public static String user_id = "user_id";
+    public static String assigned_d_userid = "assigned_d_userid";
+    public static String coins = "coins";
+    public static String number = "number";
 }
