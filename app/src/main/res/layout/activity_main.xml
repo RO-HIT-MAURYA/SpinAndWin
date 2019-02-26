@@ -54,6 +54,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/winNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
@@ -75,6 +76,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/winningAmt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
@@ -103,6 +105,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/coinCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
@@ -123,6 +126,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/spineTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
@@ -154,6 +158,7 @@
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/betAmt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/muli_semi_bold"
@@ -174,6 +179,7 @@
             android:layout_marginBottom="9dp">
 
             <TextView
+                android:id="@+id/blue1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -184,6 +190,7 @@
                 android:textColor="#B71C1C"/>
 
             <TextView
+                android:id="@+id/blue2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -194,6 +201,7 @@
                 android:textColor="@color/white"/>
 
             <TextView
+                android:id="@+id/blue3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -204,6 +212,7 @@
                 android:textColor="@color/white"/>
 
             <TextView
+                android:id="@+id/blue4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -214,6 +223,7 @@
                 android:textColor="@color/white"/>
 
             <TextView
+                android:id="@+id/blue5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -450,6 +460,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Transfer"
+                    android:onClick="onRowOneClick"
                     android:textColor="@color/white"
                     android:textSize="@dimen/top_text_size" />
 
@@ -493,19 +504,25 @@
                 android:layout_weight="1.5" />
 
             <TextView
+                android:id="@+id/oneTo18"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
                 android:background="@drawable/border_bg"
+                android:tag="43"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="1 - 18"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/nineteenTo36"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
                 android:background="@drawable/border_bg"
+                android:tag="44"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="19 - 36"
                 android:textColor="@color/white" />
@@ -527,17 +544,23 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/zero"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/border_bg"
+                    android:tag="49"
+                    android:onClick="onBorderClick"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/doubleZero"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/border_bg"
+                    android:tag="50"
+                    android:onClick="onBorderClick"
                     android:gravity="center"
                     android:text="00"
                     android:textColor="@color/white" />
@@ -563,26 +586,35 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/thirtyNine"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border_bg"
+                    android:tag="39"
                     android:gravity="center"
+                    android:text="1 to 2"
+                    android:onClick="onBorderClick"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/thirtyEight"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/border_bg"
+                    android:tag="38"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
                     android:text="1 to 2"
                     android:textColor="@color/white" />
 
                 <TextView
+                    android:id="@+id/thirtySeven"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/border_bg"
+                    android:tag="37"
                     android:gravity="center"
-                    android:text="1 to 2"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
+                    android:onClick="onBorderClick"
                     android:text="1 to 2"
                     android:textColor="@color/white" />
 
@@ -601,30 +633,39 @@
                 android:layout_weight="1.5" />
 
             <TextView
+                android:id="@+id/oneTo12"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:background="@drawable/border_bg"
+                android:tag="40"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="1 - 12"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/thirteenTo24"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:background="@drawable/border_bg"
+                android:tag="41"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="13 - 24"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/twentyFiveTo36"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:background="@drawable/border_bg"
+                android:tag="42"
+                android:onClick="onBorderClick"
                 android:gravity="center"
-                android:text="25 - 26"
+                android:text="25 - 36"
                 android:textColor="@color/white" />
 
             <TextView
@@ -645,37 +686,49 @@
                 android:layout_weight="1.5" />
 
             <TextView
+                android:id="@+id/even"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@drawable/border_bg"
+                android:tag="45"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="Even"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/red"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@drawable/red_bg"
+                android:tag="47"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="Red"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/black"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@drawable/black_bg"
+                android:tag="48"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="black"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/odd"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@drawable/border_bg"
+                android:tag="46"
+                android:onClick="onBorderClick"
                 android:gravity="center"
                 android:text="Odd"
                 android:textColor="@color/white" />
