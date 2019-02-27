@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LoadingDialog loadingDialog;
     private JsonObjectRequest jsonObjectRequest;
     private long time;
+    private String betCoin,betNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,12 +134,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adb.setNegativeButton("NO",null);
             adb.show();
         }
+        else
+        {
+            H.showMessage(this, ((TextView) view).getText().toString());
+            LinearLayout linearLayout = findViewById(R.id.topMostRow);
+            TextView textView;
+            for (int i=1; i<linearLayout.getChildCount()-3;i++)
+            {
+                textView = (TextView)linearLayout.getChildAt(i);
+                textView.setBackground(getResources().getDrawable(R.drawable.tv_sbg));
+                textView.setTextColor(getResources().getColor(R.color.black));
+            }
+            view.setBackground(getResources().getDrawable(R.drawable.tv_bg));
+            ((TextView)view).setTextColor(getResources().getColor(R.color.white));
+
+            betCoin = ((TextView)view).getText().toString();
+            H.log("betCoinIs",betCoin);
+            H.log("betNumIs",betNumber);
+            if (betCoin!=null && betNumber!=null)
+            {
+                if (!betCoin.isEmpty() && !betNumber.isEmpty())
+                    hitBettingApi(betNumber,betCoin);
+            }
+        }
     }
 
     public void on1To36Click(View view) {
         H.log("clickIs", ((TextView) view).getText().toString());
-        H.showMessage(this, ((TextView) view).getText().toString());
+        H.showMessage(this,((TextView) view).getText().toString());
 
+        betNumber = ((TextView) view).getText().toString();
+        if (betCoin!=null && betNumber!=null)
+        {
+            if (!betCoin.isEmpty() && !betNumber.isEmpty())
+                hitBettingApi(betNumber,betCoin);
+        }
     }
 
     @Override
@@ -150,49 +180,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBorderClick(View view) {
         H.log("borderClickIs", view.getTag().toString());
         H.showMessage(this, view.getTag().toString());
-    }
 
-    private void setUpGrid(int j) {
-        int k = j;
-        LinearLayout parentLayout = findViewById(R.id.parentLayout);
-        View view = View.inflate(this, R.layout.grid_elemet, null);
-        LinearLayout childLayout = (LinearLayout) view;
-        TextView textView;
-        String string;
-
-        if (k == 2) {
-            for (int i = 0; i < 12; i++) {
-                textView = ((TextView) childLayout.getChildAt(i));
-                string = textView.getText().toString().trim();
-
-                if (string.equals("6") || string.equals("15") || string.equals("24") || string.equals("33"))
-                    textView.setBackground(getResources().getDrawable(R.drawable.red_bg));
-                else
-                    textView.setBackground(getResources().getDrawable(R.drawable.black_bg));
-
-                textView.setText(j + "");
-                textView.setTag(j + "");
-                j += 3;
-            }
-        } else {
-            for (int i = 0; i < 12; i++) {
-                textView = ((TextView) childLayout.getChildAt(i));
-                string = textView.getText().toString().trim();
-                if (string.equals("6") || string.equals("12") || string.equals("15") || string.equals("24") || string.equals("30") || string.equals("33"))
-                    textView.setBackground(getResources().getDrawable(R.drawable.black_bg));
-                else
-                    textView.setBackground(getResources().getDrawable(R.drawable.red_bg));
-
-                textView.setText(j + "");
-                textView.setTag(j + "");
-                j += 3;
-            }
+        betNumber = view.getTag().toString();
+        if (betCoin!=null && betNumber!=null)
+        {
+            if (!betCoin.isEmpty() && !betNumber.isEmpty())
+                hitBettingApi(betNumber,betCoin);
         }
-        parentLayout.addView(childLayout);
-        count++;
-        if (count < 2)
-            setUpGrid(1);
-
     }
 
     public void onTransferClick(View view) {
@@ -254,6 +248,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 })
                 .run("transferCoin");
+    }
+
+    private void hitBettingApi(String bN,String bC)
+    {
+        Json json = new Json();
+        json.addString(Static.user_id,userId);
+        json.addString(Static.bet_number,bN);
+        json.addString(Static.bet_coin,bC);
+
+        Api.newApi(this, Static.baseUrl + "Betting").addJson(json)
+                .setMethod(Api.POST)
+                .onLoading(new Api.OnLoadingListener() {
+                    @Override
+                    public void onLoading(boolean isLoading) {
+                        if (isLoading)
+                            loadingDialog.show("loading...");
+                        else
+                            loadingDialog.dismiss();
+                    }
+                })
+                .onError(new Api.OnErrorListener() {
+                    @Override
+                    public void onError() {
+                        H.showMessage(MainActivity.this, "Something went wrong.");
+                    }
+                })
+                .onSuccess(new Api.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Json json) {
+                        if (json.getString(Static.status).equalsIgnoreCase("100"))
+                        {
+                            betCoin = "";
+                            betNumber = "";
+                            json = json.getJson(Static.data);
+                            String string = json.getString(Static.TotalCoins);
+                            coins = Long.parseLong(string);
+                            ((TextView)findViewById(R.id.coinCount)).setText(string);
+                        } else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));
+
+                    }
+                })
+                .run("betting");
     }
 
     @Override

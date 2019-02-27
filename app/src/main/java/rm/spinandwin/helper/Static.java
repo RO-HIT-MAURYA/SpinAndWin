@@ -19,4 +19,6 @@ public class Static {
     public static String assigned_d_userid = "assigned_d_userid";
     public static String coins = "coins";
     public static String number = "number";
+    public static String bet_number = "bet_number";
+    public static String bet_coin = "bet_coin";
 }
