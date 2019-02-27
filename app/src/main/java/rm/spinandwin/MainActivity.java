@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LoadingDialog loadingDialog;
     private JsonObjectRequest jsonObjectRequest;
     private long time;
-    private String betCoin,betNumber;
+    private String betCoin = "1";
+    private String betNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

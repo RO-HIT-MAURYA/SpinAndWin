@@ -13,5 +13,6 @@
 
     <color name="transparent">#00000000</color>
     <color name="transparent_Semi">#29000000</color>
+    <color name="blue">#0D47A1</color>
 
 </resources>

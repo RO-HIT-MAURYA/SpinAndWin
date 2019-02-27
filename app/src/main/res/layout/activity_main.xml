@@ -17,7 +17,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-30dp"
+            android:layout_marginTop="-25dp"
             android:elevation="2dp"
             android:rotation="180"
             android:src="@drawable/isosceles_triangl"
@@ -28,7 +28,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="13dp"
             android:src="@drawable/spinner" />
 
         <LinearLayout
@@ -151,7 +151,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/muli_semi_bold"
                 android:gravity="center"
                 android:text="Bet Amount"
@@ -162,7 +161,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/muli_semi_bold"
-                android:padding="3dp"
                 android:text="5000"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
@@ -174,6 +172,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="9dp"
             android:background="@drawable/border_bg"
             android:weightSum="5">
@@ -248,7 +248,7 @@
             android:id="@+id/topMostRow"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="15dp"
             android:weightSum="15">
 
             <TextView
@@ -261,22 +261,22 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="0.6"
-                android:background="@drawable/tv_sbg"
-                android:onClick="onRowOneClick"
+                android:background="@drawable/tv_bg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="1"
-                android:textColor="@color/black1"
+                android:textColor="@color/white"
                 android:textSize="@dimen/top_text_size" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
-                android:onClick="onRowOneClick"
                 android:layout_weight="0.7"
                 android:background="@drawable/tv_sbg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="5"
                 android:textColor="@color/black1"
@@ -286,10 +286,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
-                android:onClick="onRowOneClick"
                 android:layout_weight="0.7"
                 android:background="@drawable/tv_sbg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="10"
                 android:textColor="@color/black1"
@@ -300,9 +300,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="0.7"
-                android:onClick="onRowOneClick"
                 android:background="@drawable/tv_sbg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="20"
                 android:textColor="@color/black1"
@@ -312,10 +312,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
-                android:onClick="onRowOneClick"
                 android:layout_weight="0.7"
                 android:background="@drawable/tv_sbg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="50"
                 android:textColor="@color/black1"
@@ -327,8 +327,8 @@
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="0.9"
                 android:background="@drawable/tv_sbg"
-                android:onClick="onRowOneClick"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="100"
                 android:textColor="@color/black1"
@@ -339,9 +339,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="0.9"
-                android:onClick="onRowOneClick"
                 android:background="@drawable/tv_sbg"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="200"
                 android:textColor="@color/black1"
@@ -379,8 +379,8 @@
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="1.2"
                 android:background="@drawable/tv_sbg"
-                android:onClick="onRowOneClick"
                 android:gravity="center"
+                android:onClick="onRowOneClick"
                 android:padding="2dp"
                 android:text="5000"
                 android:textColor="@color/black1"
@@ -424,7 +424,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="25dp"
             android:weightSum="15">
 
             <TextView
@@ -432,29 +432,62 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5" />
 
-            <TextView
-                android:id="@+id/oneTo18"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="43"
-                android:text="1 - 18"
-                android:textColor="@color/white" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nineteenTo36"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/oneTo18"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="43"
+                    android:text="1 - 18"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="44"
-                android:text="19 - 36"
-                android:textColor="@color/white" />
+                android:layout_weight="6">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/nineteenTo36"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="44"
+                    android:text="19 - 36"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -472,27 +505,59 @@
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/zero"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
-                    android:onClick="onBorderClick"
-                    android:tag="49"
-                    android:text="0"
-                    android:textColor="@color/white" />
+                    android:layout_height="60dp">
 
-                <TextView
-                    android:id="@+id/doubleZero"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:text="1 - 18"
+                        android:textColor="@color/white"
+                        android:textSize="7sp" />
+
+                    <TextView
+                        android:id="@+id/zero"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/border_bg"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:tag="49"
+                        android:text="0"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
-                    android:onClick="onBorderClick"
-                    android:tag="50"
-                    android:text="00"
-                    android:textColor="@color/white" />
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:text="1 - 18"
+                        android:textColor="@color/white"
+                        android:textSize="7sp" />
+
+                    <TextView
+                        android:id="@+id/doubleZero"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/border_bg"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:tag="50"
+                        android:text="00"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -514,38 +579,86 @@
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/thirtyNine"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
-                    android:onClick="onBorderClick"
-                    android:tag="39"
-                    android:text="1 to 2"
-                    android:textColor="@color/white" />
+                    android:layout_height="40dp">
 
-                <TextView
-                    android:id="@+id/thirtyEight"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
-                    android:onClick="onBorderClick"
-                    android:tag="38"
-                    android:text="1 to 2"
-                    android:textColor="@color/white" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:text="1 - 18"
+                        android:textColor="@color/white"
+                        android:textSize="7sp" />
 
-                <TextView
-                    android:id="@+id/thirtySeven"
+                    <TextView
+                        android:id="@+id/thirtyNine"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/border_bg"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:tag="39"
+                        android:text="1 to 2"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/border_bg"
-                    android:gravity="center"
-                    android:onClick="onBorderClick"
-                    android:tag="37"
-                    android:text="1 to 2"
-                    android:textColor="@color/white" />
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:text="1 - 18"
+                        android:textColor="@color/white"
+                        android:textSize="7sp" />
+
+                    <TextView
+                        android:id="@+id/thirtyEight"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/border_bg"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:tag="38"
+                        android:text="1 to 2"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:text="1 - 18"
+                        android:textColor="@color/white"
+                        android:textSize="7sp" />
+
+                    <TextView
+                        android:id="@+id/thirtySeven"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/border_bg"
+                        android:gravity="center"
+                        android:onClick="onBorderClick"
+                        android:tag="37"
+                        android:text="1 to 2"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -561,41 +674,90 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5" />
 
-            <TextView
-                android:id="@+id/oneTo12"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="40"
-                android:text="1 - 12"
-                android:textColor="@color/white" />
+                android:layout_weight="4">
 
-            <TextView
-                android:id="@+id/thirteenTo24"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="41"
-                android:text="13 - 24"
-                android:textColor="@color/white" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
 
-            <TextView
-                android:id="@+id/twentyFiveTo36"
+                <TextView
+                    android:id="@+id/oneTo12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="40"
+                    android:text="1 - 12"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="42"
-                android:text="25 - 36"
-                android:textColor="@color/white" />
+                android:layout_weight="4">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/thirteenTo24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="41"
+                    android:text="13 - 24"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/twentyFiveTo36"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="42"
+                    android:text="25 - 36"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="0dp"
@@ -614,53 +776,121 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5" />
 
-            <TextView
-                android:id="@+id/even"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="45"
-                android:text="Even"
-                android:textColor="@color/white" />
+                android:layout_weight="3">
 
-            <TextView
-                android:id="@+id/red"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/red_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="47"
-                android:text="Red"
-                android:textColor="@color/white" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
 
-            <TextView
-                android:id="@+id/black"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/black_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="48"
-                android:text="black"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/even"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="45"
+                    android:text="Even"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/odd"
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:background="@drawable/border_bg"
-                android:gravity="center"
-                android:onClick="onBorderClick"
-                android:tag="46"
-                android:text="Odd"
-                android:textColor="@color/white" />
+                android:background="@drawable/red_bg">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="47"
+                    android:text="Red"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/black_bg">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="48"
+                    android:text="Black"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:text="1 - 18"
+                    android:textColor="@color/white"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/odd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_bg"
+                    android:gravity="center"
+                    android:onClick="onBorderClick"
+                    android:tag="46"
+                    android:text="Odd"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="0dp"
