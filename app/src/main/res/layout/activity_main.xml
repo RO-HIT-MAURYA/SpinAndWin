@@ -444,6 +444,7 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:onClick="onBorderClick"
+                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -471,6 +472,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -514,6 +516,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
+                        android:visibility="gone"
                         android:onClick="onBorderClick"
                         android:text="1 - 18"
                         android:textColor="@color/white"
@@ -542,6 +545,7 @@
                         android:background="@color/blue"
                         android:gravity="center"
                         android:onClick="onBorderClick"
+                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
                         android:textSize="7sp" />
@@ -568,7 +572,6 @@
                 android:layout_weight="12"
                 android:background="@drawable/border_bg"
                 android:orientation="vertical">
-
                 <include layout="@layout/grid_elemet" />
 
             </LinearLayout>
@@ -591,6 +594,7 @@
                         android:onClick="onBorderClick"
                         android:text="1 - 18"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="7sp" />
 
                     <TextView
@@ -616,6 +620,7 @@
                         android:background="@color/blue"
                         android:gravity="center"
                         android:onClick="onBorderClick"
+                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
                         android:textSize="7sp" />
@@ -643,6 +648,7 @@
                         android:background="@color/blue"
                         android:gravity="center"
                         android:onClick="onBorderClick"
+                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
                         android:textSize="7sp" />
@@ -683,6 +689,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
+                    android:visibility="gone"
                     android:gravity="center"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
@@ -713,6 +720,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -741,6 +749,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -787,6 +796,7 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:onClick="onBorderClick"
+                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -817,6 +827,7 @@
                     android:layout_marginRight="1dp"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -847,6 +858,7 @@
                     android:layout_marginRight="1dp"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -874,6 +886,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"

@@ -2,6 +2,8 @@ package rm.spinandwin;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,6 +24,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import rm.spinandwin.helper.Api;
 import rm.spinandwin.helper.H;
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long time;
     private String betCoin = "1";
     private String betNumber;
+    private RelativeLayout relativeLayout;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +68,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
+        adjustSeconds();
+
         getRecentNumbers();
+
         //setUpGrid(2);
+    }
+
+    Calendar calendar;
+    Date date;
+    private void adjustSeconds()
+    {
+        calendar = Calendar.getInstance();
+        date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        int sec = calendar.get(Calendar.SECOND);
+
+        CountDownTimer countDownTimer = new CountDownTimer(sec*1000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+                H.log("secondIs",millisUntilFinished/1000+"");
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+        countDownTimer.start();
     }
 
     private void getRecentNumbers()
@@ -164,12 +199,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         H.log("clickIs", ((TextView) view).getText().toString());
         H.showMessage(this,((TextView) view).getText().toString());
 
+
         betNumber = ((TextView) view).getText().toString();
         if (betCoin!=null && betNumber!=null)
         {
             if (!betCoin.isEmpty() && !betNumber.isEmpty())
                 hitBettingApi(betNumber,betCoin);
         }
+
+        relativeLayout = (RelativeLayout)view.getParent();
+        textView = (TextView) relativeLayout.getChildAt(0);
+        textView.setVisibility(View.VISIBLE);
+        Object tag = textView.getTag();
+        int i =0;
+        if (tag!=null)
+            i = (int)tag;
+
+        i++;
+        textView.setTag(i);
+        textView.setText(""+i);
     }
 
     @Override
@@ -188,6 +236,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!betCoin.isEmpty() && !betNumber.isEmpty())
                 hitBettingApi(betNumber,betCoin);
         }
+
+        relativeLayout = (RelativeLayout)view.getParent();
+        textView = (TextView) relativeLayout.getChildAt(0);
+        textView.setVisibility(View.VISIBLE);
+        Object tag = textView.getTag();
+        int i =0;
+        if (tag!=null)
+            i = (int)tag;
+
+        i++;
+        textView.setTag(i);
+        textView.setText(""+i);
     }
 
     public void onTransferClick(View view) {
