@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/superLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -443,7 +445,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:onClick="onBorderClick"
                     android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -473,7 +474,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -517,7 +517,6 @@
                         android:background="@color/blue"
                         android:gravity="center"
                         android:visibility="gone"
-                        android:onClick="onBorderClick"
                         android:text="1 - 18"
                         android:textColor="@color/white"
                         android:textSize="7sp" />
@@ -544,7 +543,6 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:onClick="onBorderClick"
                         android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
@@ -591,7 +589,6 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:onClick="onBorderClick"
                         android:text="1 - 18"
                         android:textColor="@color/white"
                         android:visibility="gone"
@@ -619,7 +616,6 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:onClick="onBorderClick"
                         android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
@@ -647,7 +643,6 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:onClick="onBorderClick"
                         android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
@@ -691,7 +686,6 @@
                     android:background="@color/blue"
                     android:visibility="gone"
                     android:gravity="center"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -721,7 +715,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -750,7 +743,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -795,7 +787,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:onClick="onBorderClick"
                     android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
@@ -828,7 +819,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -859,7 +849,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />
@@ -887,7 +876,6 @@
                     android:background="@color/blue"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:onClick="onBorderClick"
                     android:text="1 - 18"
                     android:textColor="@color/white"
                     android:textSize="7sp" />

@@ -11,10 +11,6 @@ import android.widget.TextView;
 
 import rm.spinandwin.R;
 
-/**
- * Created by amitkumar on 15/01/18.
- */
-
 public class LoadingDialog extends Dialog {
 
     public LoadingDialog(@NonNull Context context) {

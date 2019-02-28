@@ -21,4 +21,6 @@ public class Static {
     public static String number = "number";
     public static String bet_number = "bet_number";
     public static String bet_coin = "bet_coin";
+
+    public static final String WinNumber = "WinNumber";
 }

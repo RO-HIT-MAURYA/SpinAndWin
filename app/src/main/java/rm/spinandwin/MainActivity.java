@@ -3,7 +3,6 @@ package rm.spinandwin;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,13 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout relativeLayout;
     private TextView textView;
     private CountDownTimer countDownTimer;
+    private int betAmount=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        calendar = Calendar.getInstance();
 
         adjustSeconds();
 
@@ -74,31 +72,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        getRecentNumbers();
-
         //setUpGrid(2);
     }
 
-    Calendar calendar;
     int i;
     private void adjustSeconds()
     {
-
+        Calendar calendar = Calendar.getInstance();
         Date date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
         final int sec = calendar.get(Calendar.SECOND);
         i = sec;
 
-        countDownTimer = new CountDownTimer(60000,1000) {
+        countDownTimer = new CountDownTimer(59000,1000) {
             @Override
             public void onTick(long millisUntilFinished)
             {
-                H.log("secondIs",i+++"");
-                if (i==60)
+                H.log("secondIs",i+"");
+                i++;
+                if (i==59)
                 {
                     countDownTimer.cancel();
                     loadingDialog.hide();
                     showTimerOnScreen();
+                    getRecentNumbers();
                 }
             }
 
@@ -111,19 +108,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showTimerOnScreen()
     {
+        loadingDialog = new LoadingDialog(this,false);
+        loadingDialog.findViewById(R.id.loadingDialog).setVisibility(View.INVISIBLE);
         final TextView textView = findViewById(R.id.spineTime);
-        countDownTimer = new CountDownTimer(60000,1000)
+        countDownTimer = new CountDownTimer(59000,1000)
         {
             @Override
             public void onTick(long millisUntilFinished)
             {
                 i = (int)(millisUntilFinished/1000)-10;
+
+                if (i==11)
+                    loadingDialog.show();
+                if (i==0)
+                    loadingDialog.hide();
                 if (i<=10)
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i>=0)
-                {
                     textView.setText(i+"");
-                }
+                /*if (i==3)
+                    hitForWinningNumber();*/
+
+                if(i==-10)
+                    startActivity(getIntent());
+
             }
 
             @Override
@@ -131,6 +139,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }.start();
+    }
+
+    private void hitForWinningNumber() {
+        Json json = new Json();
+        json.addString(Static.user_id,userId);
+
+        Api.newApi(this, Static.baseUrl + "GetWinningNumberByID").addJson(json)
+                .setMethod(Api.POST)
+                .onLoading(new Api.OnLoadingListener() {
+                    @Override
+                    public void onLoading(boolean isLoading) {
+                        if (isLoading)
+                            H.log("loading...","winning number Api");
+                        else
+                            H.log("loading... ","completed");
+                            /*loadingDialog.show("loading...");
+                        else
+                            loadingDialog.dismiss();*/
+                    }
+                })
+                .onError(new Api.OnErrorListener() {
+                    @Override
+                    public void onError() {
+                        H.showMessage(MainActivity.this, "Something went wrong.");
+                    }
+                })
+                .onSuccess(new Api.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Json json) {
+                        if (json.getString(Static.status).equalsIgnoreCase("100"))
+                        {
+                            json = json.getJson(Static.data);
+                            String winNumber = json.getString(Static.WinNumber);
+                            LinearLayout linearLayout = findViewById(R.id.superLayout);
+                            //Drawable drawable = linearLayout.findViewsWithText(textView,);
+                        } else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));
+
+                    }
+                })
+                .run("winningNumberApi");
     }
 
     private void getRecentNumbers()
@@ -177,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    int count;
-
     public void onRowOneClick(View view)
     {
         if (view.getId() == R.id.transfer) {
@@ -219,6 +266,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView)view).setTextColor(getResources().getColor(R.color.white));
 
             betCoin = ((TextView)view).getText().toString();
+            try {
+                betAmount = Integer.parseInt(betCoin);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             H.log("betCoinIs",betCoin);
             H.log("betNumIs",betNumber);
             if (betCoin!=null && betNumber!=null)
@@ -233,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         H.log("clickIs", ((TextView) view).getText().toString());
         H.showMessage(this,((TextView) view).getText().toString());
 
-
         betNumber = ((TextView) view).getText().toString();
         if (betCoin!=null && betNumber!=null)
         {
@@ -245,13 +298,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
         Object tag = textView.getTag();
-        int i =0;
-        if (tag!=null)
-            i = (int)tag;
+        //int i =0;
 
-        i++;
-        textView.setTag(i);
-        textView.setText(""+i);
+        if (tag!=null)
+        {
+            try {
+                betAmount = Integer.parseInt(betCoin);
+                betAmount=betAmount+(int)tag;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            //i = (int) tag;
+        }
+
+        H.log("betCoinIs",betCoin);
+        H.log("betNumIs",betNumber);
+        textView.setTag(betAmount);
+        textView.setText(""+betAmount);
     }
 
     @Override
@@ -264,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         H.log("borderClickIs", view.getTag().toString());
         H.showMessage(this, view.getTag().toString());
 
-        betNumber = view.getTag().toString();
+        betNumber =  view.getTag().toString();
         if (betCoin!=null && betNumber!=null)
         {
             if (!betCoin.isEmpty() && !betNumber.isEmpty())
@@ -275,13 +340,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
         Object tag = textView.getTag();
-        int i =0;
-        if (tag!=null)
-            i = (int)tag;
+        //int i =0;
 
-        i++;
-        textView.setTag(i);
-        textView.setText(""+i);
+        if (tag!=null)
+        {
+            try {
+                betAmount = Integer.parseInt(betCoin);
+                betAmount=betAmount+(int)tag;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            //i = (int) tag;
+        }
+
+        H.log("betCoinIs",betCoin);
+        H.log("betNumIs",betNumber);
+        textView.setTag(betAmount);
+        textView.setText(""+betAmount);
     }
 
     public void onTransferClick(View view) {
@@ -374,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onSuccess(Json json) {
                         if (json.getString(Static.status).equalsIgnoreCase("100"))
                         {
-                            betCoin = "";
+                            //betCoin = "";
                             betNumber = "";
                             json = json.getJson(Static.data);
                             String string = json.getString(Static.TotalCoins);
