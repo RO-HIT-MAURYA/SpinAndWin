@@ -47,13 +47,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String betNumber;
     private RelativeLayout relativeLayout;
     private TextView textView;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        calendar = Calendar.getInstance();
+
+        adjustSeconds();
+
         loadingDialog = new LoadingDialog(this);
+        loadingDialog.show("loading...");
 
         String data = new Session(this).getString(Static.data);
         try {
@@ -68,35 +74,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        adjustSeconds();
-
         getRecentNumbers();
 
         //setUpGrid(2);
     }
 
     Calendar calendar;
-    Date date;
+    int i;
     private void adjustSeconds()
     {
-        calendar = Calendar.getInstance();
-        date = new Date(System.currentTimeMillis());
-        calendar.setTime(date);
-        int sec = calendar.get(Calendar.SECOND);
 
-        CountDownTimer countDownTimer = new CountDownTimer(sec*1000,1000) {
+        Date date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        final int sec = calendar.get(Calendar.SECOND);
+        i = sec;
+
+        countDownTimer = new CountDownTimer(60000,1000) {
             @Override
             public void onTick(long millisUntilFinished)
             {
-                H.log("secondIs",millisUntilFinished/1000+"");
+                H.log("secondIs",i+++"");
+                if (i==60)
+                {
+                    countDownTimer.cancel();
+                    loadingDialog.hide();
+                    showTimerOnScreen();
+                }
             }
 
             @Override
             public void onFinish() {
 
             }
-        };
-        countDownTimer.start();
+        }.start();
+    }
+
+    private void showTimerOnScreen()
+    {
+        final TextView textView = findViewById(R.id.spineTime);
+        countDownTimer = new CountDownTimer(60000,1000)
+        {
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+                i = (int)(millisUntilFinished/1000)-10;
+                if (i<=10)
+                    textView.setTextColor(getResources().getColor(R.color.red));
+                if (i>=0)
+                {
+                    textView.setText(i+"");
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 
     private void getRecentNumbers()
