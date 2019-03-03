@@ -36,7 +36,7 @@ import rm.spinandwin.helper.Static;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Dialog dialog;
-    private long coins;
+    private int totalCoins;
     private String userId;
     private String assignedUserId;
     private LoadingDialog loadingDialog;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             Json json = new Json(data);
             String string = json.getString(Static.TotalCoins);
-            coins = Long.parseLong(string);
+            totalCoins = Integer.parseInt(string);
             ((TextView) findViewById(R.id.coinCount)).setText(string);
             userId = json.getString(Static.UserId);
             assignedUserId = json.getString(Static.AssignedUserId);
@@ -82,12 +82,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Date date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
         final int sec = calendar.get(Calendar.SECOND);
+        /*int hr = calendar.get(Calendar.HOUR);
+        H.log("hrIs",hr+"");
+        int amPm = calendar.get(Calendar.AM_PM);
+        H.log("amPmIs",amPm+"");*/
         //i = sec;
 
-        countDownTimer = new CountDownTimer(60000-((sec*1000)-1000), 1000) {
+        countDownTimer = new CountDownTimer((60000 - (sec * 1000)) - 1000, 1000) {
             @Override
-            public void onTick(long millisUntilFinished)
-            {
+            public void onTick(long millisUntilFinished) {
                 /*H.log("secondIs", i + "");
                 i++;
                 if (i == 59) {
@@ -99,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFinish()
-            {
+            public void onFinish() {
                 //countDownTimer.cancel();
                 loadingDialog.hide();
                 showTimerOnScreen();
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showTimerOnScreen() {
         loadingDialog = new LoadingDialog(this, false);
         loadingDialog.findViewById(R.id.loadingDialog).setVisibility(View.INVISIBLE);
+        loadingDialog.findViewById(R.id.msg).setVisibility(View.INVISIBLE);
         final TextView textView = findViewById(R.id.spineTime);
         countDownTimer = new CountDownTimer(58000, 1000) {
             @Override
@@ -126,15 +129,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
                     textView.setText(i + "");
-                /*if (i==3)
+               /* if (i==3)
                     hitForWinningNumber();*/
 
-                //if (i == -10)
             }
 
             @Override
-            public void onFinish()
-            {
+            public void onFinish() {
                 startActivity(getIntent());
             }
         }.start();
@@ -180,8 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("winningNumberApi");
     }
 
-    private void getRecentNumbers()
-    {
+    private void getRecentNumbers() {
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -256,12 +256,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) view).setTextColor(getResources().getColor(R.color.white));
 
             betCoin = ((TextView) view).getText().toString();
-            try
-            {
+            try {
                 betAmount = Integer.parseInt(betCoin);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             H.log("betCoinIs", betCoin);
@@ -279,24 +276,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         betNumber = ((TextView) view).getText().toString();
 
-        if (!betCoin.isEmpty() && !betNumber.isEmpty())
-            hitBettingApi(betNumber, betCoin);
+        if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
+            if (betAmount > totalCoins)
+                H.showMessage(this, "You don't have sufficient coins");
+            else
+                hitBettingApi(betNumber, betCoin);
+        }
 
         relativeLayout = (RelativeLayout) view.getParent();
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
         Object tag = textView.getTag();
-        H.log("tagIs",tag+"");
-        if(tag==null)
-        {
+        H.log("tagIs", tag + "");
+        if (tag == null) {
             textView.setTag(betAmount);
-            textView.setText(betAmount+"");
-        }
-        else
-        {
-            int i = (int)textView.getTag() + betAmount;
+            textView.setText(betAmount + "");
+        } else {
+            int i = (int) textView.getTag() + betAmount;
             textView.setTag(i);
-            textView.setText(i+"");
+            textView.setText(i + "");
         }
 
         //int i =0;
@@ -318,24 +316,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         betNumber = view.getTag().toString();
 
-        if (!betCoin.isEmpty() && !betNumber.isEmpty())
-            hitBettingApi(betNumber, betCoin);
+        if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
+            if (betAmount > totalCoins)
+                H.showMessage(this, "You don't have sufficient coins");
+            else
+                hitBettingApi(betNumber, betCoin);
+        }
 
         relativeLayout = (RelativeLayout) view.getParent();
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
         Object tag = textView.getTag();
-        H.log("tagIs",tag+"");
-        if(tag==null)
-        {
+        H.log("tagIs", tag + "");
+        if (tag == null) {
             textView.setTag(betAmount);
-            textView.setText(betAmount+"");
-        }
-        else
-        {
-            int i = (int)textView.getTag() + betAmount;
+            textView.setText(betAmount + "");
+        } else {
+            int i = (int) textView.getTag() + betAmount;
             textView.setTag(i);
-            textView.setText(i+"");
+            textView.setText(i + "");
         }
 
         H.log("betCoinIs", betCoin);
@@ -346,8 +345,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String string = ((EditText) dialog.findViewById(R.id.transferAmount)).getText().toString();
         try {
             long l = Long.parseLong(string);
-            if (l > coins) {
-                H.showMessage(this, "You don't have sufficient coins");
+            if (l > totalCoins) {
+                H.showMessage(this, "You don't have sufficient totalCoins");
                 return;
             } else
                 hitTransferCoinApi(l);
@@ -387,14 +386,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (json.getString(Static.status).equalsIgnoreCase("100")) {
                             H.showMessage(MainActivity.this, json.getString(Static.message));
                             json = json.getJson(Static.data);
-                            try {
-                                long l = json.getLong(Static.TotalCoins);
-                                coins = l;
-                                ((TextView) findViewById(R.id.coinCount)).setText("" + coins);
-                                dialog.hide();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+
+                            int l = json.getInt(Static.TotalCoins);
+                            totalCoins = l;
+                            ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
+                            dialog.hide();
+
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
 
@@ -434,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             betNumber = "";
                             json = json.getJson(Static.data);
                             String string = json.getString(Static.TotalCoins);
-                            coins = Long.parseLong(string);
+                            totalCoins = Integer.parseInt(string);
                             ((TextView) findViewById(R.id.coinCount)).setText(string);
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
