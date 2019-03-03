@@ -3,6 +3,7 @@ package rm.spinandwin;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout relativeLayout;
     private TextView textView;
     private CountDownTimer countDownTimer;
+    private int totalBetAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         adjustSeconds();
-
-        loadingDialog = new LoadingDialog(this);
-        loadingDialog.show("loading...");
 
         String data = new Session(this).getString(Static.data);
         try {
@@ -75,30 +74,101 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //setUpGrid(2);
     }
 
-    int i;
+
+    Calendar calendar;
+    Date date;
+    int min;
+    Thread thread;
+    Handler handler;
 
     private void adjustSeconds() {
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date(System.currentTimeMillis());
+        loadingDialog = new LoadingDialog(MainActivity.this);
+        loadingDialog.show("loading...");
+        calendar = Calendar.getInstance();
+        date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
-        final int sec = calendar.get(Calendar.SECOND);
-        /*int hr = calendar.get(Calendar.HOUR);
-        H.log("hrIs",hr+"");
-        int amPm = calendar.get(Calendar.AM_PM);
-        H.log("amPmIs",amPm+"");*/
-        //i = sec;
+        int sec = calendar.get(Calendar.SECOND);
+        long ms = calendar.get(Calendar.MILLISECOND);
+        min = calendar.get(Calendar.MINUTE);
+        final int m = min;
 
-        countDownTimer = new CountDownTimer((60000 - (sec * 1000)) - 1000, 1000) {
+        if (ms>1)
+        {
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    while (m == min) {
+                        calendar = Calendar.getInstance();
+                        date = new Date(System.currentTimeMillis());
+                        calendar.setTime(date);
+                        min = calendar.get(Calendar.MINUTE);
+                    }
+                    loadingDialog.hide();
+                    showTimerOnScreen();
+                    getRecentNumbers();
+                }
+            }, ms);
+        }
+        else
+        {
+            loadingDialog.hide();
+            showTimerOnScreen();
+            getRecentNumbers();
+        }
+
+        /*if (sec!=1) {
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run()
+                {
+                    loadingDialog = new LoadingDialog(MainActivity.this);
+                    loadingDialog.show("loading...");
+                    while (m == min) {
+                        calendar = Calendar.getInstance();
+                        date = new Date(System.currentTimeMillis());
+                        calendar.setTime(date);
+                        min = calendar.get(Calendar.MINUTE);
+                    }
+
+                }
+            });
+            thread.start();*/
+
+        /*if (sec != 1) {
+            handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    loadingDialog = new LoadingDialog(MainActivity.this);
+                    loadingDialog.show("loading...");
+                    while (m == min) {
+                        calendar = Calendar.getInstance();
+                        date = new Date(System.currentTimeMillis());
+                        calendar.setTime(date);
+                        min = calendar.get(Calendar.MINUTE);
+                    }
+                    loadingDialog.hide();
+                    showTimerOnScreen();
+                    getRecentNumbers();
+
+                }
+            });
+        }*/
+
+        /*countDownTimer = new CountDownTimer(ms, 1) {
             @Override
-            public void onTick(long millisUntilFinished) {
-                /*H.log("secondIs", i + "");
+            public void onTick(long millisUntilFinished)
+            {
+                *//*H.log("secondIs", i + "");
                 i++;
                 if (i == 59) {
                     countDownTimer.cancel();
                     loadingDialog.hide();
                     showTimerOnScreen();
                     getRecentNumbers();
-                }*/
+                }*//*
             }
 
             @Override
@@ -108,15 +178,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showTimerOnScreen();
                 getRecentNumbers();
             }
-        }.start();
+        }.start();*/
     }
+
+    int i;
 
     private void showTimerOnScreen() {
         loadingDialog = new LoadingDialog(this, false);
         loadingDialog.findViewById(R.id.loadingDialog).setVisibility(View.INVISIBLE);
         loadingDialog.findViewById(R.id.msg).setVisibility(View.INVISIBLE);
         final TextView textView = findViewById(R.id.spineTime);
-        countDownTimer = new CountDownTimer(58000, 1000) {
+        countDownTimer = new CountDownTimer(59000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 i = (int) (millisUntilFinished / 1000) - 10;
