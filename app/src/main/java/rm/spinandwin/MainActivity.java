@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userId = json.getString(Static.UserId);
             assignedUserId = json.getString(Static.AssignedUserId);
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -195,8 +195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (i == 10)
                     loadingDialog.show();
-                if (i == 0)
+                if (i == 0) {
                     loadingDialog.hide();
+                    findViewById(R.id.parentLinear).setEnabled(false);
+                    findViewById(R.id.parentLinear).setOnClickListener(null);
+                }
                 if (i <= 10)
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
@@ -328,11 +331,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) view).setTextColor(getResources().getColor(R.color.white));
 
             betCoin = ((TextView) view).getText().toString();
-            try {
-                betAmount = Integer.parseInt(betCoin);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            betAmount = extractInt(betCoin);
+
             H.log("betCoinIs", betCoin);
             H.log("betNumIs", betNumber);
             /*if (betCoin != null && betNumber != null) {
@@ -460,6 +460,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             json = json.getJson(Static.data);
 
                             int l = json.getInt(Static.TotalCoins);
+                            updateSessionCoins(l+"");
                             totalCoins = l;
                             ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
                             dialog.hide();
@@ -483,10 +484,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .onLoading(new Api.OnLoadingListener() {
                     @Override
                     public void onLoading(boolean isLoading) {
-                        if (isLoading)
+                        /*if (isLoading)
                             loadingDialog.show("loading...");
                         else
-                            loadingDialog.dismiss();
+                            loadingDialog.dismiss();*/
                     }
                 })
                 .onError(new Api.OnErrorListener() {
@@ -503,14 +504,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             betNumber = "";
                             json = json.getJson(Static.data);
                             String string = json.getString(Static.TotalCoins);
-                            totalCoins = Integer.parseInt(string);
+                            totalCoins = extractInt(string);
                             ((TextView) findViewById(R.id.coinCount)).setText(string);
+
+                            updateSessionCoins(string);
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
 
                     }
                 })
                 .run("betting");
+    }
+
+    private void updateSessionCoins(String str)
+    {
+        Session session = new Session(this);
+        String data = session.getString(Static.data);
+        try {
+            Json json = new Json(data);
+            //String string = json.getString(Static.TotalCoins);
+            json.addString(Static.TotalCoins,str);
+
+            session.addString(Static.data,json+"");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int extractInt(String string)
+    {
+        int i=0;
+        try
+        {
+            i = Integer.parseInt(string);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return i;
     }
 
     @Override
