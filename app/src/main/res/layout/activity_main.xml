@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/superLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/superLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -12,8 +11,8 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_weight="0.25"
+        android:gravity="center"
         android:padding="2dp">
 
         <ImageView
@@ -57,12 +56,12 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/winNum"
+                    android:id="@+id/betAmt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
                     android:padding="3dp"
-                    android:text="90000"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold" />
@@ -156,19 +155,19 @@
                 android:fontFamily="@font/muli_semi_bold"
                 android:gravity="center"
                 android:text="Win Number"
-                android:textSize="10sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/betAmt"
+                android:id="@+id/winNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/muli_semi_bold"
-                android:text="36"
                 android:background="@color/black"
-                android:textSize="10sp"
-                android:textColor="@color/white"
+                android:fontFamily="@font/muli_semi_bold"
                 android:padding="3dp"
+                android:text="36"
+                android:textColor="@color/white"
+                android:textSize="10sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -244,7 +243,6 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/parentLinear"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginRight="6dp"
@@ -430,6 +428,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lL1"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="25dp"
@@ -451,10 +450,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/oneTo18"
@@ -479,10 +478,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/nineteenTo36"
@@ -497,7 +496,6 @@
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -508,6 +506,7 @@
             android:weightSum="15">
 
             <LinearLayout
+                android:id="@+id/lL3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
@@ -522,10 +521,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
-                        android:textSize="7sp" />
+                        android:textSize="7sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/zero"
@@ -549,10 +548,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
-                        android:textSize="7sp" />
+                        android:textSize="7sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/doubleZero"
@@ -570,17 +569,18 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/parentLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="12"
                 android:background="@drawable/border_bg"
                 android:orientation="vertical">
-                <include layout="@layout/grid_elemet" />
+
+                <include layout="@layout/grid_element" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lL2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
@@ -597,8 +597,8 @@
                         android:gravity="center"
                         android:text="1 - 18"
                         android:textColor="@color/white"
-                        android:visibility="gone"
-                        android:textSize="7sp" />
+                        android:textSize="7sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/thirtyNine"
@@ -622,10 +622,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
-                        android:textSize="7sp" />
+                        android:textSize="7sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/thirtyEight"
@@ -649,10 +649,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="1 - 18"
                         android:textColor="@color/white"
-                        android:textSize="7sp" />
+                        android:textSize="7sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/thirtySeven"
@@ -672,6 +672,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lL4"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:weightSum="15">
@@ -690,11 +691,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
-                    android:visibility="gone"
                     android:gravity="center"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/oneTo12"
@@ -720,10 +721,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/thirteenTo24"
@@ -748,10 +749,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/twentyFiveTo36"
@@ -766,14 +767,10 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5" />
-
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lL5"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:weightSum="15">
@@ -793,10 +790,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/even"
@@ -824,10 +821,10 @@
                     android:layout_marginRight="1dp"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/red"
@@ -854,10 +851,10 @@
                     android:layout_marginRight="1dp"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/black"
@@ -881,10 +878,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:text="1 - 18"
                     android:textColor="@color/white"
-                    android:textSize="7sp" />
+                    android:textSize="7sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/odd"
@@ -898,11 +895,6 @@
                     android:textColor="@color/white" />
 
             </RelativeLayout>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5" />
 
         </LinearLayout>
 

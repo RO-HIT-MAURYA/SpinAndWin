@@ -2,6 +2,7 @@ package rm.spinandwin;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userId;
     private String assignedUserId;
     private LoadingDialog loadingDialog;
+    private int totalBatedAmt;
     private JsonObjectRequest jsonObjectRequest;
     private long time;
     private String betCoin = "1";
@@ -78,107 +80,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Calendar calendar;
     Date date;
     int min;
-    Thread thread;
-    Handler handler;
+    /*Thread thread;
+    Handler handler;*/
 
     private void adjustSeconds() {
+        //min = calendar.get(Calendar.MINUTE);
+        //final int m = min;
         loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.show("loading...");
         calendar = Calendar.getInstance();
         date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
+        int ms = calendar.get(Calendar.MILLISECOND);
         int sec = calendar.get(Calendar.SECOND);
-        long ms = calendar.get(Calendar.MILLISECOND);
-        min = calendar.get(Calendar.MINUTE);
-        final int m = min;
 
-        if (ms>1)
-        {
-            new Handler().postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    while (m == min) {
-                        calendar = Calendar.getInstance();
-                        date = new Date(System.currentTimeMillis());
-                        calendar.setTime(date);
-                        min = calendar.get(Calendar.MINUTE);
-                    }
-                    loadingDialog.hide();
-                    showTimerOnScreen();
-                    getRecentNumbers();
-                }
-            }, ms);
-        }
-        else
-        {
-            loadingDialog.hide();
-            showTimerOnScreen();
-            getRecentNumbers();
-        }
-
-        /*if (sec!=1) {
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run()
-                {
-                    loadingDialog = new LoadingDialog(MainActivity.this);
-                    loadingDialog.show("loading...");
-                    while (m == min) {
-                        calendar = Calendar.getInstance();
-                        date = new Date(System.currentTimeMillis());
-                        calendar.setTime(date);
-                        min = calendar.get(Calendar.MINUTE);
-                    }
-
-                }
-            });
-            thread.start();*/
-
-        /*if (sec != 1) {
-            handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    loadingDialog = new LoadingDialog(MainActivity.this);
-                    loadingDialog.show("loading...");
-                    while (m == min) {
-                        calendar = Calendar.getInstance();
-                        date = new Date(System.currentTimeMillis());
-                        calendar.setTime(date);
-                        min = calendar.get(Calendar.MINUTE);
-                    }
-                    loadingDialog.hide();
-                    showTimerOnScreen();
-                    getRecentNumbers();
-
-                }
-            });
-        }*/
-
-        /*countDownTimer = new CountDownTimer(ms, 1) {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onTick(long millisUntilFinished)
-            {
-                *//*H.log("secondIs", i + "");
-                i++;
-                if (i == 59) {
-                    countDownTimer.cancel();
-                    loadingDialog.hide();
-                    showTimerOnScreen();
-                    getRecentNumbers();
-                }*//*
-            }
-
-            @Override
-            public void onFinish() {
-                //countDownTimer.cancel();
+            public void run() {
                 loadingDialog.hide();
                 showTimerOnScreen();
                 getRecentNumbers();
             }
-        }.start();*/
+        }, 60000 - ((sec * 1000) + ms));
+
     }
 
     int i;
@@ -197,8 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     loadingDialog.show();
                 if (i == 0) {
                     loadingDialog.hide();
-                    findViewById(R.id.parentLinear).setEnabled(false);
-                    findViewById(R.id.parentLinear).setOnClickListener(null);
+                    disableBetAmtRow();
                 }
                 if (i <= 10)
                     textView.setTextColor(getResources().getColor(R.color.red));
@@ -214,6 +137,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(getIntent());
             }
         }.start();
+    }
+
+    private void disableBetAmtRow() {
+        LinearLayout linearLayout = findViewById(R.id.topMostRow);
+        RelativeLayout relativeLayout;
+        for (int i = 0; i < linearLayout.getChildCount(); i++)//for bet amt row
+        {
+            linearLayout.getChildAt(i).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.lL1);
+        for (int i = 1; i < linearLayout.getChildCount(); i++) // for 1-18 & 19-36 row
+        {
+            relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
+            relativeLayout.getChildAt(1).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.lL2);
+        for (int i = 0; i < linearLayout.getChildCount(); i++) //for  3: 1 to 3
+        {
+            relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
+            relativeLayout.getChildAt(1).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.lL3);
+        for (int i = 0; i < linearLayout.getChildCount(); i++) // for 0 & 00
+        {
+            relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
+            relativeLayout.getChildAt(1).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.lL4);
+        for (int i = 1; i < linearLayout.getChildCount(); i++) // for 1-12 row
+        {
+            relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
+            relativeLayout.getChildAt(1).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.lL5);
+        for (int i = 1; i < linearLayout.getChildCount(); i++) // for even odd row
+        {
+            relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
+            relativeLayout.getChildAt(1).setEnabled(false);
+        }
+
+        linearLayout = findViewById(R.id.parentLayout);
+        LinearLayout childLayout;
+        for (int i=0; i<linearLayout.getChildCount(); i++)
+        {
+            childLayout = (LinearLayout)linearLayout.getChildAt(i);
+            for (int j=0; j<childLayout.getChildCount(); j++)
+            {
+                relativeLayout = (RelativeLayout)childLayout.getChildAt(j);
+                relativeLayout.getChildAt(1).setEnabled(false);
+            }
+        }
+
     }
 
     private void hitForWinningNumber() {
@@ -335,10 +315,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             H.log("betCoinIs", betCoin);
             H.log("betNumIs", betNumber);
-            /*if (betCoin != null && betNumber != null) {
-                if (!betCoin.isEmpty() && !betNumber.isEmpty())
-                    hitBettingApi(betNumber, betCoin);
-            }*/
         }
     }
 
@@ -460,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             json = json.getJson(Static.data);
 
                             int l = json.getInt(Static.TotalCoins);
-                            updateSessionCoins(l+"");
+                            updateSessionCoins(l + "");
                             totalCoins = l;
                             ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
                             dialog.hide();
@@ -473,11 +449,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("transferCoin");
     }
 
+
+    int bc;//to avoid private of bC
+
     private void hitBettingApi(String bN, String bC) {
         Json json = new Json();
         json.addString(Static.user_id, userId);
         json.addString(Static.bet_number, bN);
         json.addString(Static.bet_coin, bC);
+        bc = extractInt(bC);
 
         Api.newApi(this, Static.baseUrl + "Betting").addJson(json)
                 .setMethod(Api.POST)
@@ -506,8 +486,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String string = json.getString(Static.TotalCoins);
                             totalCoins = extractInt(string);
                             ((TextView) findViewById(R.id.coinCount)).setText(string);
-
                             updateSessionCoins(string);
+                            totalBatedAmt = totalBatedAmt + bc;
+                            ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
 
@@ -516,30 +497,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("betting");
     }
 
-    private void updateSessionCoins(String str)
-    {
+    private void updateSessionCoins(String str) {
         Session session = new Session(this);
         String data = session.getString(Static.data);
         try {
             Json json = new Json(data);
             //String string = json.getString(Static.TotalCoins);
-            json.addString(Static.TotalCoins,str);
+            json.addString(Static.TotalCoins, str);
 
-            session.addString(Static.data,json+"");
+            session.addString(Static.data, json + "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private int extractInt(String string)
-    {
-        int i=0;
-        try
-        {
+    private int extractInt(String string) {
+        int i = 0;
+        try {
             i = Integer.parseInt(string);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return i;
