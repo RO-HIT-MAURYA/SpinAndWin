@@ -8,9 +8,14 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,9 +30,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import rm.spinandwin.helper.Api;
 import rm.spinandwin.helper.H;
@@ -43,15 +50,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String assignedUserId;
     private LoadingDialog loadingDialog;
     private int totalBatedAmt;
-    private JsonObjectRequest jsonObjectRequest;
     private long time;
     private String betCoin = "1";
     private int betAmount = 1;
     private String betNumber;
     private RelativeLayout relativeLayout;
     private TextView textView;
-    private CountDownTimer countDownTimer;
-    private int totalBetAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +116,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadingDialog.findViewById(R.id.loadingDialog).setVisibility(View.INVISIBLE);
         loadingDialog.findViewById(R.id.msg).setVisibility(View.INVISIBLE);
         final TextView textView = findViewById(R.id.spineTime);
-        countDownTimer = new CountDownTimer(59000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(59000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 i = (int) (millisUntilFinished / 1000) - 10;
 
-                if (i == 10)
+                if (i == 11)
                     loadingDialog.show();
                 if (i == 0) {
                     loadingDialog.hide();
@@ -127,9 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
                     textView.setText(i + "");
-               /* if (i==3)
-                    hitForWinningNumber();*/
-
+                if (i==0)
+                    hitForWinningNumber();
             }
 
             @Override
@@ -193,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 relativeLayout.getChildAt(1).setEnabled(false);
             }
         }
-
     }
 
     private void hitForWinningNumber() {
@@ -222,12 +224,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 })
                 .onSuccess(new Api.OnSuccessListener() {
                     @Override
-                    public void onSuccess(Json json) {
-                        if (json.getString(Static.status).equalsIgnoreCase("100")) {
+                    public void onSuccess(Json json)
+                    {
+                        if (json.getString(Static.status).equalsIgnoreCase("100"))
+                        {
                             json = json.getJson(Static.data);
                             String winNumber = json.getString(Static.WinNumber);
-                            LinearLayout linearLayout = findViewById(R.id.superLayout);
-                            //Drawable drawable = linearLayout.findViewsWithText(textView,);
+                            spinCircle(winNumber);
+
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
 
@@ -236,8 +240,214 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("winningNumberApi");
     }
 
+    final float factor =4.72f;// (360/38)/2;
+    private void spinCircle(String winNumber)
+    {
+        ImageView imageView = findViewById(R.id.circle);
+        Random random = new Random();
+        int degree=0, oldDegree;
+        final TextView textView = findViewById(R.id.winNum);
+
+        oldDegree = degree*360;
+        degree = random.nextInt(3600);
+
+        Log.e("degreeIs",degree+"");
+        degree = degree+720;
+        Log.e("degreesIs",degree+"");
+        RotateAnimation rotateAnimation = new RotateAnimation(oldDegree,degree,RotateAnimation.RELATIVE_TO_SELF,0.5f,RotateAnimation.RELATIVE_TO_SELF,0.5f);
+        rotateAnimation.setDuration(4000);
+        rotateAnimation.setFillAfter(true);
+        rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        final int finalDegree = degree;
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                textView.setText("");
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                textView.setText(currentNumber(360 - (finalDegree %360)));
+                Log.e("selectedIs",currentNumber(360 - (finalDegree %360)));
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(rotateAnimation);
+    }
+
+    private String currentNumber(int degrees)
+    {
+        String text = "";
+        if (degrees >= (factor * 1) && degrees < (factor * 3))
+        {
+            text = "32 black";
+        }
+        if (degrees >= (factor * 3) && degrees < (factor *  5))
+        {
+            text = "15 red";
+
+        }
+        if (degrees >= (factor * 5) && degrees < (factor * 7))
+        {
+            text = "19 black";
+
+        }
+        if (degrees >= (factor * 7) && degrees < (factor * 9))
+        {
+            text = "4 red";
+
+        }
+        if (degrees >= (factor * 9) && degrees < (factor * 11))
+        {
+            text = "21 black";
+        }
+        if (degrees >= (factor * 11) && degrees < (factor * 13))
+        {
+            text = "2 red";
+        }
+        if (degrees >= (factor * 13) && degrees < (factor * 15))
+        {
+            text = "25 black";
+        }
+        if (degrees >= (factor * 15) && degrees < (factor * 17))
+        {
+            text = "17 red";
+        }
+        if (degrees >= (factor * 17) && degrees < (factor * 19))
+        {
+            text = "34 black";
+        }
+        if (degrees >= (factor * 19) && degrees < (factor * 21))
+        {
+            text = "00 green";
+        }
+        if (degrees >= (factor * 21) && degrees < (factor * 23))
+        {
+            text = "6 black";
+        }
+        if (degrees >= (factor * 23) && degrees < (factor * 25))
+        {
+            text = "27 red";
+        }
+        if (degrees >= (factor * 25) && degrees < (factor * 27))
+        {
+            text = "13 black";
+        }
+        if (degrees >= (factor * 27) && degrees < (factor *  29))
+        {
+            text = "36 red";
+        }
+        if (degrees >= (factor * 29) && degrees < (factor * 31))
+        {
+            text = "11 black";
+        }
+        if (degrees >= (factor * 31) && degrees < (factor * 33))
+        {
+            text = "30 red";
+        }
+        if (degrees >= (factor * 33) && degrees < (factor * 35))
+        {
+            text = "8 black";
+        }
+        if (degrees >= (factor * 35) && degrees < (factor * 37))
+        {
+            text = "23 red";
+        }
+        if (degrees >= (factor * 37) && degrees < (factor * 39))
+        {
+            text = "10 black";
+        }
+        if (degrees >= (factor * 39) && degrees < (factor * 41))
+        {
+            text = "5 red";
+        }
+        if (degrees >= (factor * 41) && degrees < (factor * 43))
+        {
+            text = "24 black";
+        }
+        if (degrees >= (factor * 43) && degrees < (factor * 45))
+        {
+            text = "16 red";
+        }
+        if (degrees >= (factor * 45) && degrees < (factor * 47))
+        {
+            text = "33 black";
+        }
+        if (degrees >= (factor * 47) && degrees < (factor *  49))
+        {
+            text = "1 red";
+        }
+        if (degrees >= (factor * 49) && degrees < (factor * 51))
+        {
+            text = "20 black";
+        }
+        if (degrees >= (factor * 51) && degrees < (factor * 53))
+        {
+            text = "14 red";
+        }
+        if (degrees >= (factor * 53) && degrees < (factor * 55))
+        {
+            text = "31 black";
+        }
+        if (degrees >= (factor * 55) && degrees < (factor * 57))
+        {
+            text = "9 red";
+        }
+        if (degrees >= (factor * 57) && degrees < (factor * 59))
+        {
+            text = "22 black";
+        }
+        if (degrees >= (factor * 59) && degrees < (factor * 61))
+        {
+            text = "18 red";
+        }
+        if (degrees >= (factor * 61) && degrees < (factor * 63))
+        {
+            text = "29 black";
+        }
+        if (degrees >= (factor * 63) && degrees < (factor * 65))
+        {
+            text = "7 red";
+        }
+        if (degrees >= (factor * 65) && degrees < (factor * 67))
+        {
+            text = "28 black";
+        }
+        if (degrees >= (factor * 67) && degrees < (factor * 69))
+        {
+            text = "12 red";
+        }
+        if (degrees >= (factor * 69) && degrees < (factor * 71))
+        {
+            text = "35 black";
+        }
+        if (degrees >= (factor *71) && degrees < (factor * 73))
+        {
+            text = "3 red";
+        }
+        if (degrees >= (factor *73) && degrees < (factor * 75))
+        {
+            text = "26 black";
+        }
+        if ((degrees >= (factor *75) && degrees < 360)|| (degrees>0 && degrees<(factor*1)))
+        {
+            text = "0 green";
+        }
+        /*if ((degrees >= (factor *77) && degrees < 360)|| (degrees>0 && degrees<(factor*1)))
+        {
+            text = "0 green";
+        }*/
+
+        return text;
+    }
+
     private void getRecentNumbers() {
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -352,12 +562,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.close)
-            dialog.hide();
-    }
-
     public void onBorderClick(View view) {
         H.log("borderClickIs", view.getTag().toString());
         H.showMessage(this, view.getTag().toString());
@@ -449,7 +653,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("transferCoin");
     }
 
-
     int bc;//to avoid private of bC
 
     private void hitBettingApi(String bN, String bC) {
@@ -519,6 +722,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         return i;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.close)
+            dialog.hide();
     }
 
     @Override
