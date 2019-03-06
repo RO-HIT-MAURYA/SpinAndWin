@@ -3,6 +3,7 @@ package rm.spinandwin;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -56,11 +57,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String betNumber;
     private RelativeLayout relativeLayout;
     private TextView textView;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mediaPlayer = MediaPlayer.create(this,R.raw.sound);
 
         adjustSeconds();
 
@@ -131,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
                     textView.setText(i + "");
-                if (i==0)
+                if (i == 0)
                     hitForWinningNumber();
             }
 
@@ -187,12 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         linearLayout = findViewById(R.id.parentLayout);
         LinearLayout childLayout;
-        for (int i=0; i<linearLayout.getChildCount(); i++)
-        {
-            childLayout = (LinearLayout)linearLayout.getChildAt(i);
-            for (int j=0; j<childLayout.getChildCount(); j++)
-            {
-                relativeLayout = (RelativeLayout)childLayout.getChildAt(j);
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+            childLayout = (LinearLayout) linearLayout.getChildAt(i);
+            for (int j = 0; j < childLayout.getChildCount(); j++) {
+                relativeLayout = (RelativeLayout) childLayout.getChildAt(j);
                 relativeLayout.getChildAt(1).setEnabled(false);
             }
         }
@@ -224,13 +226,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 })
                 .onSuccess(new Api.OnSuccessListener() {
                     @Override
-                    public void onSuccess(Json json)
-                    {
-                        if (json.getString(Static.status).equalsIgnoreCase("100"))
-                        {
+                    public void onSuccess(Json json) {
+                        if (json.getString(Static.status).equalsIgnoreCase("100")) {
                             json = json.getJson(Static.data);
-                            String winNumber = json.getString(Static.WinNumber);
-                            spinCircle(winNumber);
+                            String winNumber = json.getInt(Static.WinNumber) + "";
+                            String winAmount = json.getInt(Static.WinAmount) + "";
+                            String color = json.getString(Static.WinNumberColour);
+                            totalCoins = json.getInt(Static.TotalCoins);
+                            spinCircle(winNumber, winAmount, color,totalCoins);
 
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
@@ -240,36 +243,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .run("winningNumberApi");
     }
 
-    final float factor =4.72f;// (360/38)/2;
-    private void spinCircle(String winNumber)
+    final float factor = 4.72f;// (360/38)/2;
+
+    private void spinCircle(final String winNumber, final String winAmt, final String color, final int totalCoins)
     {
         ImageView imageView = findViewById(R.id.circle);
         Random random = new Random();
-        int degree=0, oldDegree;
+        int degree = 0, oldDegree;
         final TextView textView = findViewById(R.id.winNum);
 
-        oldDegree = degree*360;
-        degree = random.nextInt(3600);
+        oldDegree = degree * 360;
+        /*degree = random.nextInt(3600);
 
-        Log.e("degreeIs",degree+"");
-        degree = degree+720;
-        Log.e("degreesIs",degree+"");
-        RotateAnimation rotateAnimation = new RotateAnimation(oldDegree,degree,RotateAnimation.RELATIVE_TO_SELF,0.5f,RotateAnimation.RELATIVE_TO_SELF,0.5f);
-        rotateAnimation.setDuration(4000);
+        Log.e("degreeIs", degree + "");*/
+        //degree = degree + 720;
+        degree = getDegree(winNumber);
+        Log.e("degreesIs", degree + "");
+        RotateAnimation rotateAnimation = new RotateAnimation(oldDegree, degree, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setDuration(5000);
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         final int finalDegree = degree;
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void onAnimationStart(Animation animation)
+            {
+                mediaPlayer.start();
                 textView.setText("");
             }
 
             @Override
             public void onAnimationEnd(Animation animation)
             {
-                textView.setText(currentNumber(360 - (finalDegree %360)));
-                Log.e("selectedIs",currentNumber(360 - (finalDegree %360)));
+                textView.setText(currentNumber(360 - (finalDegree % 360)));
+                if (color.equalsIgnoreCase("b"))
+                    textView.setBackgroundColor(getResources().getColor(R.color.black));
+                else if (color.equalsIgnoreCase("r"))
+                    textView.setBackgroundColor(getResources().getColor(R.color.red));
+                else
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                ((TextView) findViewById(R.id.winningAmt)).setText(winAmt);
+                findViewById(R.id.winNumLayout).setVisibility(View.VISIBLE);
+                ((TextView)findViewById(R.id.coinCount)).setText(totalCoins+"");
+                updateSessionCoins(totalCoins + "");
+                //if (color.equalsIgnoreCase());
+                Log.e("selectedIs", currentNumber(360 - (finalDegree % 360)));
             }
 
             @Override
@@ -280,163 +298,208 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageView.startAnimation(rotateAnimation);
     }
 
-    private String currentNumber(int degrees)
+    private int getDegree(String winNumber)
     {
+        int i=0;
+
+        if (winNumber.equalsIgnoreCase("1"))
+            i = 2290;
+        else if (winNumber.equalsIgnoreCase("2"))
+            i = 1382;
+        else if (winNumber.equalsIgnoreCase("3"))
+            i = 2536;
+        else if (winNumber.equalsIgnoreCase("4"))
+            i = 2483;
+        else if (winNumber.equalsIgnoreCase("5"))
+            i = 169;
+        else if (winNumber.equalsIgnoreCase("6"))
+            i = 3134;
+        else if (winNumber.equalsIgnoreCase("7"))
+            i = 2215;
+        else if (winNumber.equalsIgnoreCase("8"))
+            i = 3435;
+        else if (winNumber.equalsIgnoreCase("9"))
+            i = 2978;
+        else if (winNumber.equalsIgnoreCase("10"))
+            i = 3062;
+        else if (winNumber.equalsIgnoreCase("11"))
+            i = 220;
+        else if (winNumber.equalsIgnoreCase("12"))
+            i = 1482;
+        else if (winNumber.equalsIgnoreCase("13"))
+            i = 3115;
+        else if (winNumber.equalsIgnoreCase("14"))
+            i = 1914;
+        else if (winNumber.equalsIgnoreCase("15"))
+            i = 3221;
+        else if (winNumber.equalsIgnoreCase("16"))
+            i = 150;
+        else if (winNumber.equalsIgnoreCase("17"))
+            i = 2800;
+        else if (winNumber.equalsIgnoreCase("18"))
+            i = 1154;
+        else if (winNumber.equalsIgnoreCase("19"))
+            i = 690;
+        else if (winNumber.equalsIgnoreCase("20"))
+            i = 1204;
+        else if (winNumber.equalsIgnoreCase("21"))
+            i = 2473;
+        else if (winNumber.equalsIgnoreCase("22"))
+            i = 2964;
+        else if (winNumber.equalsIgnoreCase("23"))
+            i = 189;
+        else if (winNumber.equalsIgnoreCase("24"))
+            i = 2678;
+        else if (winNumber.equalsIgnoreCase("25"))
+            i = 293;
+        else if (winNumber.equalsIgnoreCase("26"))
+            i = 2169;
+        else if (winNumber.equalsIgnoreCase("27"))
+            i = 1687;
+        else if (winNumber.equalsIgnoreCase("28"))
+            i = 765;
+        else if (winNumber.equalsIgnoreCase("29"))
+            i = 67;
+        else if (winNumber.equalsIgnoreCase("30"))
+            i = 3452;
+        else if (winNumber.equalsIgnoreCase("31"))
+            i = 3344;
+        else if (winNumber.equalsIgnoreCase("32"))
+            i = 3868;
+        else if (winNumber.equalsIgnoreCase("33"))
+            i = 1581;
+        else if (winNumber.equalsIgnoreCase("34"))
+            i = 3434;
+        else if (winNumber.equalsIgnoreCase("35"))
+            i = 1827;
+        else if (winNumber.equalsIgnoreCase("36"))
+            i = 3465;
+        else if (winNumber.equalsIgnoreCase("0"))
+            i = 2156;
+        else
+            i =2423;
+
+        return i;
+    }
+
+    private String currentNumber(int degrees) {
         String text = "";
-        if (degrees >= (factor * 1) && degrees < (factor * 3))
-        {
-            text = "32 black";
+        if (degrees >= (factor * 1) && degrees < (factor * 3)) {
+            text = "32";
         }
-        if (degrees >= (factor * 3) && degrees < (factor *  5))
-        {
-            text = "15 red";
+        if (degrees >= (factor * 3) && degrees < (factor * 5)) {
+            text = "15";
 
         }
-        if (degrees >= (factor * 5) && degrees < (factor * 7))
-        {
-            text = "19 black";
+        if (degrees >= (factor * 5) && degrees < (factor * 7)) {
+            text = "19";
 
         }
-        if (degrees >= (factor * 7) && degrees < (factor * 9))
-        {
-            text = "4 red";
+        if (degrees >= (factor * 7) && degrees < (factor * 9)) {
+            text = "4";
 
         }
-        if (degrees >= (factor * 9) && degrees < (factor * 11))
-        {
-            text = "21 black";
+        if (degrees >= (factor * 9) && degrees < (factor * 11)) {
+            text = "21";
         }
-        if (degrees >= (factor * 11) && degrees < (factor * 13))
-        {
-            text = "2 red";
+        if (degrees >= (factor * 11) && degrees < (factor * 13)) {
+            text = "2";
         }
-        if (degrees >= (factor * 13) && degrees < (factor * 15))
-        {
-            text = "25 black";
+        if (degrees >= (factor * 13) && degrees < (factor * 15)) {
+            text = "25";
         }
-        if (degrees >= (factor * 15) && degrees < (factor * 17))
-        {
-            text = "17 red";
+        if (degrees >= (factor * 15) && degrees < (factor * 17)) {
+            text = "17";
         }
-        if (degrees >= (factor * 17) && degrees < (factor * 19))
-        {
-            text = "34 black";
+        if (degrees >= (factor * 17) && degrees < (factor * 19)) {
+            text = "34";
         }
-        if (degrees >= (factor * 19) && degrees < (factor * 21))
-        {
-            text = "00 green";
+        if (degrees >= (factor * 19) && degrees < (factor * 21)) {
+            text = "00";
         }
-        if (degrees >= (factor * 21) && degrees < (factor * 23))
-        {
-            text = "6 black";
+        if (degrees >= (factor * 21) && degrees < (factor * 23)) {
+            text = "6";
         }
-        if (degrees >= (factor * 23) && degrees < (factor * 25))
-        {
-            text = "27 red";
+        if (degrees >= (factor * 23) && degrees < (factor * 25)) {
+            text = "27";
         }
-        if (degrees >= (factor * 25) && degrees < (factor * 27))
-        {
-            text = "13 black";
+        if (degrees >= (factor * 25) && degrees < (factor * 27)) {
+            text = "13";
         }
-        if (degrees >= (factor * 27) && degrees < (factor *  29))
-        {
-            text = "36 red";
+        if (degrees >= (factor * 27) && degrees < (factor * 29)) {
+            text = "36";
         }
-        if (degrees >= (factor * 29) && degrees < (factor * 31))
-        {
-            text = "11 black";
+        if (degrees >= (factor * 29) && degrees < (factor * 31)) {
+            text = "11";
         }
-        if (degrees >= (factor * 31) && degrees < (factor * 33))
-        {
-            text = "30 red";
+        if (degrees >= (factor * 31) && degrees < (factor * 33)) {
+            text = "30";
         }
-        if (degrees >= (factor * 33) && degrees < (factor * 35))
-        {
-            text = "8 black";
+        if (degrees >= (factor * 33) && degrees < (factor * 35)) {
+            text = "8";
         }
-        if (degrees >= (factor * 35) && degrees < (factor * 37))
-        {
-            text = "23 red";
+        if (degrees >= (factor * 35) && degrees < (factor * 37)) {
+            text = "23";
         }
-        if (degrees >= (factor * 37) && degrees < (factor * 39))
-        {
-            text = "10 black";
+        if (degrees >= (factor * 37) && degrees < (factor * 39)) {
+            text = "10";
         }
-        if (degrees >= (factor * 39) && degrees < (factor * 41))
-        {
-            text = "5 red";
+        if (degrees >= (factor * 39) && degrees < (factor * 41)) {
+            text = "5";
         }
-        if (degrees >= (factor * 41) && degrees < (factor * 43))
-        {
-            text = "24 black";
+        if (degrees >= (factor * 41) && degrees < (factor * 43)) {
+            text = "24";
         }
-        if (degrees >= (factor * 43) && degrees < (factor * 45))
-        {
-            text = "16 red";
+        if (degrees >= (factor * 43) && degrees < (factor * 45)) {
+            text = "16";
         }
-        if (degrees >= (factor * 45) && degrees < (factor * 47))
-        {
-            text = "33 black";
+        if (degrees >= (factor * 45) && degrees < (factor * 47)) {
+            text = "33";
         }
-        if (degrees >= (factor * 47) && degrees < (factor *  49))
-        {
-            text = "1 red";
+        if (degrees >= (factor * 47) && degrees < (factor * 49)) {
+            text = "1";
         }
-        if (degrees >= (factor * 49) && degrees < (factor * 51))
-        {
-            text = "20 black";
+        if (degrees >= (factor * 49) && degrees < (factor * 51)) {
+            text = "20";
         }
-        if (degrees >= (factor * 51) && degrees < (factor * 53))
-        {
-            text = "14 red";
+        if (degrees >= (factor * 51) && degrees < (factor * 53)) {
+            text = "14";
         }
-        if (degrees >= (factor * 53) && degrees < (factor * 55))
-        {
-            text = "31 black";
+        if (degrees >= (factor * 53) && degrees < (factor * 55)) {
+            text = "31";
         }
-        if (degrees >= (factor * 55) && degrees < (factor * 57))
-        {
-            text = "9 red";
+        if (degrees >= (factor * 55) && degrees < (factor * 57)) {
+            text = "9";
         }
-        if (degrees >= (factor * 57) && degrees < (factor * 59))
-        {
-            text = "22 black";
+        if (degrees >= (factor * 57) && degrees < (factor * 59)) {
+            text = "22";
         }
-        if (degrees >= (factor * 59) && degrees < (factor * 61))
-        {
-            text = "18 red";
+        if (degrees >= (factor * 59) && degrees < (factor * 61)) {
+            text = "18";
         }
-        if (degrees >= (factor * 61) && degrees < (factor * 63))
-        {
-            text = "29 black";
+        if (degrees >= (factor * 61) && degrees < (factor * 63)) {
+            text = "29";
         }
-        if (degrees >= (factor * 63) && degrees < (factor * 65))
-        {
-            text = "7 red";
+        if (degrees >= (factor * 63) && degrees < (factor * 65)) {
+            text = "7";
         }
-        if (degrees >= (factor * 65) && degrees < (factor * 67))
-        {
-            text = "28 black";
+        if (degrees >= (factor * 65) && degrees < (factor * 67)) {
+            text = "28";
         }
-        if (degrees >= (factor * 67) && degrees < (factor * 69))
-        {
-            text = "12 red";
+        if (degrees >= (factor * 67) && degrees < (factor * 69)) {
+            text = "12";
         }
-        if (degrees >= (factor * 69) && degrees < (factor * 71))
-        {
-            text = "35 black";
+        if (degrees >= (factor * 69) && degrees < (factor * 71)) {
+            text = "35";
         }
-        if (degrees >= (factor *71) && degrees < (factor * 73))
-        {
-            text = "3 red";
+        if (degrees >= (factor * 71) && degrees < (factor * 73)) {
+            text = "3";
         }
-        if (degrees >= (factor *73) && degrees < (factor * 75))
-        {
-            text = "26 black";
+        if (degrees >= (factor * 73) && degrees < (factor * 75)) {
+            text = "26";
         }
-        if ((degrees >= (factor *75) && degrees < 360)|| (degrees>0 && degrees<(factor*1)))
-        {
-            text = "0 green";
+        if ((degrees >= (factor * 75) && degrees < 360) || (degrees > 0 && degrees < (factor * 1))) {
+            text = "0";
         }
         /*if ((degrees >= (factor *77) && degrees < 360)|| (degrees>0 && degrees<(factor*1)))
         {
@@ -487,7 +550,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void onRowOneClick(View view) {
+    public void onRowOneClick(View view)
+    {
         if (view.getId() == R.id.transfer) {
             dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -508,7 +572,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
             adb.setNegativeButton("NO", null);
             adb.show();
-        } else {
+        } else
+            {
+                MediaPlayer.create(this,R.raw.coin).start();
             H.showMessage(this, ((TextView) view).getText().toString());
             LinearLayout linearLayout = findViewById(R.id.topMostRow);
             TextView textView;

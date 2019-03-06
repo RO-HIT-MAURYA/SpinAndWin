@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
                     android:padding="3dp"
-                    android:text="314"
+                    android:text="00"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold" />
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
                     android:padding="3dp"
-                    android:text="59"
+                    android:text="50"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold" />
@@ -142,10 +142,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/winNumLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/blueLayout"
             android:layout_marginBottom="10dp"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -165,7 +167,6 @@
                 android:background="@color/black"
                 android:fontFamily="@font/muli_semi_bold"
                 android:padding="3dp"
-                android:text="36"
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 android:textStyle="bold" />
