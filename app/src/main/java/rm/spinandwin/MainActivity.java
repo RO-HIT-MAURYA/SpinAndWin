@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.show();
         } else if (view.getId() == R.id.logout) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setMessage("Do you really want to exit?");
+            adb.setMessage("Do you really want to logout?");
             adb.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -803,10 +803,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() - time < 800)
+    public void onBackPressed()
+    {
+        if (System.currentTimeMillis() - time < 800) {
             super.onBackPressed();
-        else {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else
+            {
             time = System.currentTimeMillis();
             H.showMessage(this, "Press again to exit.");
         }
