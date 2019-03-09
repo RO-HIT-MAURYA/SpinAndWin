@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void spinCircle(final String winNumber, final String winAmt, final String color, final int totalCoins)
     {
         ImageView imageView = findViewById(R.id.circle);
-        Random random = new Random();
+        //Random random = new Random();
         int degree = 0, oldDegree;
         final TextView textView = findViewById(R.id.winNum);
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.e("degreeIs", degree + "");*/
         //degree = degree + 720;
-        degree = getDegree(winNumber);
+        degree = getDegree(winNumber) + 720;
         Log.e("degreesIs", degree + "");
         RotateAnimation rotateAnimation = new RotateAnimation(oldDegree, degree, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setDuration(5000);
@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void on1To36Click(View view) {
         H.log("clickIs", ((TextView) view).getText().toString());
-        H.showMessage(this, ((TextView) view).getText().toString());
+        //H.showMessage(this, ((TextView) view).getText().toString());
 
         betNumber = ((TextView) view).getText().toString();
 
@@ -630,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onBorderClick(View view) {
         H.log("borderClickIs", view.getTag().toString());
-        H.showMessage(this, view.getTag().toString());
+        //H.showMessage(this, view.getTag().toString());
 
         betNumber = view.getTag().toString();
 
