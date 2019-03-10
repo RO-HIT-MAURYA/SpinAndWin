@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mediaPlayer = MediaPlayer.create(this,R.raw.sound);
+        mediaPlayer = MediaPlayer.create(this, R.raw.sound);
 
         adjustSeconds();
 
@@ -130,13 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (i == 0) {
                     loadingDialog.hide();
                     disableBetAmtRow();
+                    hitForWinningNumber();
                 }
                 if (i <= 10)
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
                     textView.setText(i + "");
-                if (i == 0)
-                    hitForWinningNumber();
             }
 
             @Override
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String winAmount = json.getInt(Static.WinAmount) + "";
                             String color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
-                            spinCircle(winNumber, winAmount, color,totalCoins);
+                            spinCircle(winNumber, winAmount, color, totalCoins);
 
                         } else
                             H.showMessage(MainActivity.this, json.getString(Static.message));
@@ -245,8 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     final float factor = 4.72f;// (360/38)/2;
 
-    private void spinCircle(final String winNumber, final String winAmt, final String color, final int totalCoins)
-    {
+    private void spinCircle(final String winNumber, final String winAmt, final String color, final int totalCoins) {
         ImageView imageView = findViewById(R.id.circle);
         //Random random = new Random();
         int degree = 0, oldDegree;
@@ -266,15 +264,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final int finalDegree = degree;
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation)
-            {
+            public void onAnimationStart(Animation animation) {
                 mediaPlayer.start();
                 textView.setText("");
             }
 
             @Override
-            public void onAnimationEnd(Animation animation)
-            {
+            public void onAnimationEnd(Animation animation) {
                 textView.setText(currentNumber(360 - (finalDegree % 360)));
                 if (color.equalsIgnoreCase("b"))
                     textView.setBackgroundColor(getResources().getColor(R.color.black));
@@ -284,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 ((TextView) findViewById(R.id.winningAmt)).setText(winAmt);
                 findViewById(R.id.winNumLayout).setVisibility(View.VISIBLE);
-                ((TextView)findViewById(R.id.coinCount)).setText(totalCoins+"");
+                ((TextView) findViewById(R.id.coinCount)).setText(totalCoins + "");
                 updateSessionCoins(totalCoins + "");
                 //if (color.equalsIgnoreCase());
                 Log.e("selectedIs", currentNumber(360 - (finalDegree % 360)));
@@ -298,9 +294,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageView.startAnimation(rotateAnimation);
     }
 
-    private int getDegree(String winNumber)
-    {
-        int i=0;
+    private int getDegree(String winNumber) {
+        int i = 0;
 
         if (winNumber.equalsIgnoreCase("1"))
             i = 2290;
@@ -377,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (winNumber.equalsIgnoreCase("0"))
             i = 2156;
         else
-            i =2423;
+            i = 2423;
 
         return i;
     }
@@ -550,8 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void onRowOneClick(View view)
-    {
+    public void onRowOneClick(View view) {
         if (view.getId() == R.id.transfer) {
             dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -567,15 +561,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     new Session(MainActivity.this).clear();
+                    Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     finish();
                 }
             });
             adb.setNegativeButton("NO", null);
             adb.show();
-        } else
-            {
-                MediaPlayer.create(this,R.raw.coin).start();
-            H.showMessage(this, ((TextView) view).getText().toString());
+        } else {
+            MediaPlayer.create(this, R.raw.coin).start();
+            //H.showMessage(this, ((TextView) view).getText().toString());
             LinearLayout linearLayout = findViewById(R.id.topMostRow);
             TextView textView;
             for (int i = 1; i < linearLayout.getChildCount() - 3; i++) {
@@ -595,6 +591,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void on1To36Click(View view) {
+        MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("clickIs", ((TextView) view).getText().toString());
         //H.showMessage(this, ((TextView) view).getText().toString());
 
@@ -629,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBorderClick(View view) {
+        MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
@@ -803,17 +801,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if (System.currentTimeMillis() - time < 800) {
             super.onBackPressed();
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
-        else
-            {
+        } else {
             time = System.currentTimeMillis();
             H.showMessage(this, "Press again to exit.");
         }
