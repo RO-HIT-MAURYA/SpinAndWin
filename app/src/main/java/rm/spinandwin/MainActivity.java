@@ -504,7 +504,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return text;
     }
 
-    private void getRecentNumbers() {
+    private void getRecentNumbers()
+    {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -530,11 +531,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void setBlueLayoutData(JSONObject jsonObject) {
+    private void setBlueLayoutData(JSONObject jsonObject)
+    {
         try {
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
-            for (int i = 0; i < 5; i++) {
+            findViewById(R.id.blueLayout).setVisibility(View.VISIBLE);
+            for (int i = 0; i < 5; i++)
+            {
                 jsonObject = jsonArray.getJSONObject(i);
                 String string = jsonObject.getString(Static.number);
                 if (string != null)
@@ -570,7 +574,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adb.setNegativeButton("NO", null);
             adb.show();
         } else {
-            MediaPlayer.create(this, R.raw.coin).start();
+            //MediaPlayer.create(this, R.raw.coin).start();
             //H.showMessage(this, ((TextView) view).getText().toString());
             LinearLayout linearLayout = findViewById(R.id.topMostRow);
             TextView textView;
@@ -591,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void on1To36Click(View view) {
-        MediaPlayer.create(this, R.raw.keyclick).start();
+       // MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("clickIs", ((TextView) view).getText().toString());
         //H.showMessage(this, ((TextView) view).getText().toString());
 
@@ -626,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBorderClick(View view) {
-        MediaPlayer.create(this, R.raw.keyclick).start();
+       // MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
