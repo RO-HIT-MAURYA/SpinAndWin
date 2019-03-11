@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //setUpGrid(2);
+        getRecentNumbers();
     }
 
 
@@ -107,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 loadingDialog.hide();
                 showTimerOnScreen();
-                getRecentNumbers();
             }
         }, 60000 - ((sec * 1000) + ms));
 
@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 findViewById(R.id.winNumLayout).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.coinCount)).setText(totalCoins + "");
                 updateSessionCoins(totalCoins + "");
+                getRecentNumbers();
                 //if (color.equalsIgnoreCase());
                 Log.e("selectedIs", currentNumber(360 - (finalDegree % 360)));
             }
@@ -360,11 +361,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (winNumber.equalsIgnoreCase("31"))
             i = 3344;
         else if (winNumber.equalsIgnoreCase("32"))
-            i = 3868;
+            i = 2151;
         else if (winNumber.equalsIgnoreCase("33"))
             i = 1581;
         else if (winNumber.equalsIgnoreCase("34"))
-            i = 3434;
+            i = 1715;
         else if (winNumber.equalsIgnoreCase("35"))
             i = 1827;
         else if (winNumber.equalsIgnoreCase("36"))
@@ -536,7 +537,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
-            findViewById(R.id.blueLayout).setVisibility(View.VISIBLE);
             for (int i = 0; i < 5; i++)
             {
                 jsonObject = jsonArray.getJSONObject(i);
