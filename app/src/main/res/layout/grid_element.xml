@@ -19,6 +19,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -50,6 +51,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -81,6 +83,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -112,6 +115,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -143,6 +147,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -174,6 +179,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -205,6 +211,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_21"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -236,6 +243,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_24"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -267,6 +275,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_27"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -298,6 +307,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -329,6 +339,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_33"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -360,6 +371,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_36"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -398,6 +410,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -429,6 +442,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -460,6 +474,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -491,6 +506,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -522,6 +538,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -553,6 +570,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -584,6 +602,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -615,6 +634,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_23"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -646,6 +666,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_26"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -677,6 +698,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_29"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -708,6 +730,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_32"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -739,6 +762,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_35"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -777,6 +801,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -808,6 +833,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -839,6 +865,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -870,6 +897,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -901,6 +929,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -932,6 +961,7 @@
             android:background="@drawable/red_bg">
 
             <TextView
+                android:id="@+id/_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -963,6 +993,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_19"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -994,6 +1025,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_22"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -1025,6 +1057,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -1056,6 +1089,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_28"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -1087,6 +1121,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_31"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -1118,6 +1153,7 @@
             android:background="@drawable/black_bg">
 
             <TextView
+                android:id="@+id/_34"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"

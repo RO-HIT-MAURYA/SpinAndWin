@@ -244,6 +244,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/superLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginRight="6dp"

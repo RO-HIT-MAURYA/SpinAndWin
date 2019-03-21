@@ -1,6 +1,7 @@
 package rm.spinandwin;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String winAmount = json.getInt(Static.WinAmount) + "";
                             String color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
+                            new ApiTask(winNumber);
                             spinCircle(winNumber, winAmount, color, totalCoins);
 
                         } else
@@ -815,6 +817,115 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             time = System.currentTimeMillis();
             H.showMessage(this, "Press again to exit.");
+        }
+    }
+
+    public class ApiTask
+    {
+        int winNum;
+        //Context context;
+
+        ApiTask(String winNumber)
+        {
+            try {
+                winNum = Integer.parseInt(winNumber);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            LinearLayout linearLayout = findViewById(R.id.superLayout);
+            int k = findId(winNum);
+            if (k!=-1) {
+                View view = linearLayout.findViewById(k);
+                RelativeLayout relativeLayout = (RelativeLayout)view.getParent();
+                TextView textView = (TextView)relativeLayout.getChildAt(1);
+                H.log("stringIs", textView.getText().toString());
+            }
+        }
+
+        private int findId(int i)
+        {
+            switch (i)
+            {
+                case 1: return R.id._1;
+
+                case 2: return R.id._2;
+
+                case 3: return R.id._3;
+
+                case 4: return R.id._4;
+
+                case 5: return R.id._5;
+
+                case 6: return R.id._6;
+
+                case 7: return R.id._7;
+
+                case 8: return R.id._8;
+
+                case 9: return R.id._9;
+
+                case 10: return R.id._10;
+
+                case 11: return R.id._11;
+
+                case 12: return R.id._12;
+
+                case 13: return R.id._13;
+
+                case 14: return R.id._14;
+
+                case 15: return R.id._15;
+
+                case 16: return R.id._16;
+
+                case 17: return R.id._17;
+
+                case 18: return R.id._18;
+
+                case 19: return R.id._19;
+
+                case 20: return R.id._20;
+
+                case 21: return R.id._21;
+
+                case 22: return R.id._22;
+
+                case 23: return R.id._23;
+
+                case 24: return R.id._24;
+
+                case 25: return R.id._25;
+
+                case 26: return R.id._26;
+
+                case 27: return R.id._27;
+
+                case 28: return R.id._28;
+
+                case 29: return R.id._29;
+
+                case 30: return R.id._30;
+
+                case 31: return R.id._31;
+
+                case 32: return R.id._32;
+
+                case 33: return R.id._33;
+
+                case 34: return R.id._34;
+
+                case 35: return R.id._35;
+
+                case 36: return R.id._36;
+
+                case 0: return R.id.zero;
+
+                case 37: return R.id.doubleZero;
+
+                default:return -1;
+
+            }
         }
     }
 }
