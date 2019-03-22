@@ -519,6 +519,7 @@
                     android:layout_height="60dp">
 
                     <TextView
+                        android:id="@+id/_zero"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
@@ -546,6 +547,7 @@
                     android:layout_height="60dp">
 
                     <TextView
+                        android:id="@+id/_doubleZero"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
@@ -817,6 +819,7 @@
                 android:background="@drawable/red_bg">
 
                 <TextView
+                    android:id="@+id/_red"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"
@@ -847,6 +850,7 @@
                 android:background="@drawable/black_bg">
 
                 <TextView
+                    android:id="@+id/_black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"

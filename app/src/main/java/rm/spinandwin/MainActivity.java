@@ -1,7 +1,6 @@
 package rm.spinandwin;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -59,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout relativeLayout;
     private TextView textView;
     private MediaPlayer mediaPlayer;
+    private String color = "";
+    private int totalWinAmt;//used to count win amt from all 6 probability,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Calendar calendar;
     Date date;
-    int min;
-    /*Thread thread;
-    Handler handler;*/
 
     private void adjustSeconds() {
         //min = calendar.get(Calendar.MINUTE);
@@ -231,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             json = json.getJson(Static.data);
                             String winNumber = json.getInt(Static.WinNumber) + "";
                             String winAmount = json.getInt(Static.WinAmount) + "";
-                            String color = json.getString(Static.WinNumberColour);
+                            color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
                             new ApiTask(winNumber);
                             spinCircle(winNumber, winAmount, color, totalCoins);
@@ -287,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getRecentNumbers();
                 //if (color.equalsIgnoreCase());
                 Log.e("selectedIs", currentNumber(360 - (finalDegree % 360)));
+                H.log("totalWinAmtIs",totalWinAmt+"");
             }
 
             @Override
@@ -507,8 +506,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return text;
     }
 
-    private void getRecentNumbers()
-    {
+    private void getRecentNumbers() {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -534,13 +532,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void setBlueLayoutData(JSONObject jsonObject)
-    {
+    private void setBlueLayoutData(JSONObject jsonObject) {
         try {
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 jsonObject = jsonArray.getJSONObject(i);
                 String string = jsonObject.getString(Static.number);
                 if (string != null)
@@ -597,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void on1To36Click(View view) {
-       // MediaPlayer.create(this, R.raw.keyclick).start();
+        // MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("clickIs", ((TextView) view).getText().toString());
         //H.showMessage(this, ((TextView) view).getText().toString());
 
@@ -632,7 +628,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBorderClick(View view) {
-       // MediaPlayer.create(this, R.raw.keyclick).start();
+        // MediaPlayer.create(this, R.raw.keyclick).start();
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
@@ -820,110 +816,177 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public class ApiTask
-    {
+    public class ApiTask {
         int winNum;
-        //Context context;
 
-        ApiTask(String winNumber)
-        {
+        ApiTask(String winNumber) {
             try {
-                winNum = Integer.parseInt(winNumber);
+                if (winNumber.equals("00"))
+                    winNum = 37;
+                else
+                    winNum = Integer.parseInt(winNumber);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             LinearLayout linearLayout = findViewById(R.id.superLayout);
             int k = findId(winNum);
-            if (k!=-1) {
-                View view = linearLayout.findViewById(k);
-                RelativeLayout relativeLayout = (RelativeLayout)view.getParent();
-                TextView textView = (TextView)relativeLayout.getChildAt(1);
-                H.log("stringIs", textView.getText().toString());
+            if (k != -1) {
+                TextView textView = linearLayout.findViewById(k);
+                if (textView.getVisibility() == View.VISIBLE) {
+                    int l = extractInt(textView.getText().toString()) * 36;
+                    H.log("I am","Executed");
+                    totalWinAmt = l * 36;
+                }
+                calculateByColor();
+
             }
+
         }
 
-        private int findId(int i)
+        private void calculateByColor()
         {
-            switch (i)
+            if (color.equals("R") && findViewById(R.id._red).getVisibility()==View.VISIBLE)
             {
-                case 1: return R.id._1;
+                int l = extractInt(textView.getText().toString()) * 36;
+                totalWinAmt = totalWinAmt+(l*2);
+            }
+            else if (color.equals("B") && findViewById(R.id._black).getVisibility()==View.VISIBLE)
+            {
+                int l = extractInt(textView.getText().toString()) * 36;
+                totalWinAmt = totalWinAmt+(l*2);
+            }
 
-                case 2: return R.id._2;
+        }
 
-                case 3: return R.id._3;
+        private int extractInt(String numString) {
+            int i = 0;
+            try {
+                i = Integer.parseInt(numString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return i;
+        }
 
-                case 4: return R.id._4;
+        private int findId(int i) {
+            switch (i) {
+                case 1:
+                    return R.id._1;
 
-                case 5: return R.id._5;
+                case 2:
+                    return R.id._2;
 
-                case 6: return R.id._6;
+                case 3:
+                    return R.id._3;
 
-                case 7: return R.id._7;
+                case 4:
+                    return R.id._4;
 
-                case 8: return R.id._8;
+                case 5:
+                    return R.id._5;
 
-                case 9: return R.id._9;
+                case 6:
+                    return R.id._6;
 
-                case 10: return R.id._10;
+                case 7:
+                    return R.id._7;
 
-                case 11: return R.id._11;
+                case 8:
+                    return R.id._8;
 
-                case 12: return R.id._12;
+                case 9:
+                    return R.id._9;
 
-                case 13: return R.id._13;
+                case 10:
+                    return R.id._10;
 
-                case 14: return R.id._14;
+                case 11:
+                    return R.id._11;
 
-                case 15: return R.id._15;
+                case 12:
+                    return R.id._12;
 
-                case 16: return R.id._16;
+                case 13:
+                    return R.id._13;
 
-                case 17: return R.id._17;
+                case 14:
+                    return R.id._14;
 
-                case 18: return R.id._18;
+                case 15:
+                    return R.id._15;
 
-                case 19: return R.id._19;
+                case 16:
+                    return R.id._16;
 
-                case 20: return R.id._20;
+                case 17:
+                    return R.id._17;
 
-                case 21: return R.id._21;
+                case 18:
+                    return R.id._18;
 
-                case 22: return R.id._22;
+                case 19:
+                    return R.id._19;
 
-                case 23: return R.id._23;
+                case 20:
+                    return R.id._20;
 
-                case 24: return R.id._24;
+                case 21:
+                    return R.id._21;
 
-                case 25: return R.id._25;
+                case 22:
+                    return R.id._22;
 
-                case 26: return R.id._26;
+                case 23:
+                    return R.id._23;
 
-                case 27: return R.id._27;
+                case 24:
+                    return R.id._24;
 
-                case 28: return R.id._28;
+                case 25:
+                    return R.id._25;
 
-                case 29: return R.id._29;
+                case 26:
+                    return R.id._26;
 
-                case 30: return R.id._30;
+                case 27:
+                    return R.id._27;
 
-                case 31: return R.id._31;
+                case 28:
+                    return R.id._28;
 
-                case 32: return R.id._32;
+                case 29:
+                    return R.id._29;
 
-                case 33: return R.id._33;
+                case 30:
+                    return R.id._30;
 
-                case 34: return R.id._34;
+                case 31:
+                    return R.id._31;
 
-                case 35: return R.id._35;
+                case 32:
+                    return R.id._32;
 
-                case 36: return R.id._36;
+                case 33:
+                    return R.id._33;
 
-                case 0: return R.id.zero;
+                case 34:
+                    return R.id._34;
 
-                case 37: return R.id.doubleZero;
+                case 35:
+                    return R.id._35;
 
-                default:return -1;
+                case 36:
+                    return R.id._36;
+
+                case 0:
+                    return R.id._zero;
+
+                case 37:
+                    return R.id._doubleZero;
+
+                default:
+                    return -1;
 
             }
         }
