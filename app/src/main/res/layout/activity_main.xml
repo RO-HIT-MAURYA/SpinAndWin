@@ -595,6 +595,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/_thirtyNine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
@@ -605,7 +606,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/thirtyNine"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/border_bg"
@@ -622,6 +622,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/_thirtyEight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
@@ -632,7 +633,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/thirtyEight"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/border_bg"
@@ -649,6 +649,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/_thirtySeven"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/blue"
@@ -659,7 +660,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/thirtySeven"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/border_bg"
@@ -790,6 +790,7 @@
                 android:layout_weight="3">
 
                 <TextView
+                    android:id="@+id/_even"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
@@ -880,6 +881,7 @@
                 android:layout_weight="3">
 
                 <TextView
+                    android:id="@+id/_odd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/blue"
