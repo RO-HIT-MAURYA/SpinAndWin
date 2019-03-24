@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String color = "";
     private int totalWinAmt;//used to count win amt from all 6 probability,
     private boolean isInFront = true;
+    private String wheelId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,11 +141,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                if (isInFront) {
+                finish();
+                startActivity(getIntent());
+               /* if (isInFront) {
                     finish();
                     startActivity(getIntent());
-                }
-                //recreate();
+                }*/
             }
         }.start();
     }
@@ -290,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 //((TextView) findViewById(R.id.winningAmt)).setText(winAmt);todo win num from api
                 ((TextView) findViewById(R.id.winningAmt)).setText(totalWinAmt + "");//from all calculation
+                hitTotalCoinsById();
                 findViewById(R.id.winNumLayout).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.coinCount)).setText(totalCoins + "");
                 updateSessionCoins(totalCoins + "");
@@ -305,6 +308,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         imageView.startAnimation(rotateAnimation);
+    }
+
+    private void hitTotalCoinsById() {
+        Json json = new Json();
+        json.addString(Static.user_id,userId);
+        json.addString(Static.spin_id,wheelId);
+        json.addString(Static.winning_amount,totalWinAmt+"");
+
+        if (!H.isInternetAvailable(this)) {
+            H.showMessage(this, "Network not available");
+            return;
+        }
+
+        Api.newApi(this, Static.baseUrl + "GetTotalCoinsByID").addJson(json)
+                .setMethod(Api.POST)
+                .onLoading(new Api.OnLoadingListener() {
+                    @Override
+                    public void onLoading(boolean isLoading) {
+                        if (isLoading)
+                            loadingDialog.show("loading...");
+                        else
+                            loadingDialog.dismiss();
+                    }
+                })
+                .onError(new Api.OnErrorListener() {
+                    @Override
+                    public void onError() {
+                        H.showMessage(MainActivity.this, "Something went wrong.");
+                    }
+                })
+                .onSuccess(new Api.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Json json) {
+                        if (json.getString(Static.status).equalsIgnoreCase("100")) {
+                            H.showMessage(MainActivity.this, json.getString(Static.message));
+                            json = json.getJson(Static.data);
+
+                            int l = json.getInt(Static.TotalCoins);
+                            updateSessionCoins(l + "");
+                            totalCoins = l;
+                            ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
+
+                        } /*else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));*/
+
+                    }
+                })
+                .run("getTotalCoinsByID");
     }
 
     private int getDegree(String winNumber) {
@@ -564,6 +615,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (string != null)
                     ((TextView) linearLayout.getChildAt(i)).setText(string);
             }
+            jsonObject = jsonArray.getJSONObject(5);
+            wheelId = jsonObject.getString(Static.number);
+            //new Session(this).addString(Static.wheelId,wheelId);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -860,7 +915,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
+    /*@Override
     protected void onPause() {
         super.onPause();
 
@@ -876,7 +931,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(getIntent());
         isInFront = true;
         H.log("cycleIsStart",isInFront+"");
-    }
+    }*/
 
     public class ApiTask {
         int winNum;

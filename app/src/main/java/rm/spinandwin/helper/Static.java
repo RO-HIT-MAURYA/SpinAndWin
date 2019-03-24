@@ -25,4 +25,7 @@ public class Static {
     public static String bet_coin = "bet_coin";
 
     public static final String WinNumber = "WinNumber";
+    public static String wheelId = "wheelId";
+    public static String spin_id = "spin_id";
+    public static String winning_amount = "winning_amount";
 }
