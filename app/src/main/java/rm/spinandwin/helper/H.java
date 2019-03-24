@@ -3,6 +3,8 @@ package rm.spinandwin.helper;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
@@ -182,5 +184,24 @@ public class H {
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm!=null)
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static boolean isInternetAvailable(Context context)
+    {
+
+        boolean connected;
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+            H.log("connected",""+connected);
+        }
+        else
+            connected = false;
+        H.log("connected",""+connected);
+
+
+        return connected;
     }
 }

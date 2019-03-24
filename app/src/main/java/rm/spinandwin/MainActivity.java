@@ -140,8 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFinish() {
-                startActivity(getIntent());
+            public void onFinish()
+            {
+                /*finish();
+                startActivity(getIntent());*/
+                onRestart();
             }
         }.start();
     }
@@ -203,6 +206,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void hitForWinningNumber() {
         Json json = new Json();
         json.addString(Static.user_id, userId);
+
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
 
         Api.newApi(this, Static.baseUrl + "GetWinningNumberByID").addJson(json)
                 .setMethod(Api.POST)
@@ -509,6 +518,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getRecentNumbers() {
+
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Static.baseUrl + "GetRecentNumbers", new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -534,7 +550,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void setBlueLayoutData(JSONObject jsonObject) {
+    private void setBlueLayoutData(JSONObject jsonObject)
+    {
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
+
         try {
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
@@ -596,6 +619,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void on1To36Click(View view) {
         // MediaPlayer.create(this, R.raw.keyclick).start();
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
         H.log("clickIs", ((TextView) view).getText().toString());
         //H.showMessage(this, ((TextView) view).getText().toString());
 
@@ -631,6 +659,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onBorderClick(View view) {
         // MediaPlayer.create(this, R.raw.keyclick).start();
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
@@ -661,7 +694,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         H.log("betNumIs", betNumber);
     }
 
-    public void onTransferClick(View view) {
+    public void onTransferClick(View view)
+    {
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
         String string = ((EditText) dialog.findViewById(R.id.transferAmount)).getText().toString();
         try {
             long l = Long.parseLong(string);
@@ -682,6 +721,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (assignedUserId != null)
             json.addString(Static.assigned_d_userid, assignedUserId);
         json.addString(Static.coins, "" + l);
+
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
 
         Api.newApi(this, Static.baseUrl + "TransferCoin").addJson(json)
                 .setMethod(Api.POST)
@@ -729,6 +774,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         json.addString(Static.bet_number, bN);
         json.addString(Static.bet_coin, bC);
         bc = extractInt(bC);
+
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
 
         Api.newApi(this, Static.baseUrl + "Betting").addJson(json)
                 .setMethod(Api.POST)

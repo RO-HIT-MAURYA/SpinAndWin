@@ -59,7 +59,13 @@ public class LogInActivity extends AppCompatActivity {
         hitLogInApi(mainJson);
     }
 
-    private void hitLogInApi(Json json) {
+    private void hitLogInApi(Json json)
+    {
+        if (!H.isInternetAvailable(this))
+        {
+            H.showMessage(this,"Network not available");
+            return;
+        }
         Api.newApi(this, Static.baseUrl + "GamerLogin").addJson(json)
                 .setMethod(Api.POST)
                 .onLoading(new Api.OnLoadingListener() {
