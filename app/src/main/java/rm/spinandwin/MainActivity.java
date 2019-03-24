@@ -31,13 +31,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import rm.spinandwin.helper.Api;
 import rm.spinandwin.helper.H;
@@ -142,9 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish()
             {
-                /*finish();
-                startActivity(getIntent());*/
-                onRestart();
+                finish();
+                startActivity(getIntent());
             }
         }.start();
     }
@@ -290,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else
                     textView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 //((TextView) findViewById(R.id.winningAmt)).setText(winAmt);todo win num from api
+                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");//from all calculation
                 findViewById(R.id.winNumLayout).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.coinCount)).setText(totalCoins + "");
                 updateSessionCoins(totalCoins + "");
@@ -892,7 +890,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     H.log("I am","Executed");
                     totalWinAmt = l * 36;
                     H.log("apiWinIsNumberSpecific",totalWinAmt+"");
-                    ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 }
                 calculateByColor();
                 calculateByEvenOdd();
@@ -910,7 +907,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._oneTo12)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*3);
                 H.log("apiWinIs1-12Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             else if (winNum>12 && winNum<25 && findViewById(R.id._thirteenTo24).getVisibility() == View.VISIBLE)
@@ -918,7 +914,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._thirteenTo24)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*3);
                 H.log("apiWinIs13-24Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             else if (winNum>24 && winNum<37 && findViewById(R.id._twentyFiveTo36).getVisibility() == View.VISIBLE)
@@ -926,7 +921,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._twentyFiveTo36)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*3);
                 H.log("apiWinIs25-36Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
         }
@@ -938,7 +932,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._oneTo18)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIs1-18Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             else if (winNum>18 && winNum<37 && findViewById(R.id._nineteenTo36).getVisibility() == View.VISIBLE)
@@ -946,7 +939,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._nineteenTo36)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIs19-36Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
         }
@@ -958,7 +950,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._thirtyNine)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIs1-2Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             List<String> list = Arrays.asList(getResources().getStringArray(R.array.row_two));
@@ -967,7 +958,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._thirtyEight)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIs2-3Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             list = Arrays.asList(getResources().getStringArray(R.array.row_three));
@@ -976,7 +966,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._thirtySeven)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIs3-4Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
         }
 
@@ -986,7 +975,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._zero)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*36);
                 H.log("apiWinIs0Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
                 return;
             }
             else if (winNum==37 && findViewById(R.id._doubleZero).getVisibility() == View.VISIBLE)
@@ -994,7 +982,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._doubleZero)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*36);
                 H.log("apiWinIs00Amt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
         }
 
@@ -1005,14 +992,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._even)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIsEvenAmt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
             else if (winNum%2!=0 && winNum!=37 && findViewById(R.id._odd).getVisibility() == View.VISIBLE)//37 means 00 so it will be considered as odd
             {
                 int l = extractInt(((TextView)findViewById(R.id._odd)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIsOddAmt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
 
         }
@@ -1024,14 +1009,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView)findViewById(R.id._red)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIsRedAmt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
             else if (color.equals("B") && findViewById(R.id._black).getVisibility()==View.VISIBLE)
             {
                 int l = extractInt(((TextView)findViewById(R.id._black)).getText().toString());
                 totalWinAmt = totalWinAmt+(l*2);
                 H.log("apiWinIsBlackAmt",totalWinAmt+"");
-                ((TextView)findViewById(R.id.winningAmt)).setText(totalWinAmt+"");
             }
 
         }
