@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void hitForWinningNumber() {
         Json json = new Json();
         json.addString(Static.user_id, userId);
+        json.addString(Static.spin_id,wheelId);
 
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Network not available");
@@ -246,9 +247,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             new ApiTask(winNumber);
                             spinCircle(winNumber, winAmount, color, totalCoins);
 
-                        } else
-                            H.showMessage(MainActivity.this, json.getString(Static.message));
-
+                        } /*else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));*/
                     }
                 })
                 .run("winningNumberApi");
@@ -610,12 +610,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
             for (int i = 0; i < 5; i++) {
-                jsonObject = jsonArray.getJSONObject(i);
+                jsonObject = jsonArray.getJSONObject(i+1);
                 String string = jsonObject.getString(Static.number);
                 if (string != null)
                     ((TextView) linearLayout.getChildAt(i)).setText(string);
             }
-            jsonObject = jsonArray.getJSONObject(5);
+            jsonObject = jsonArray.getJSONObject(0);
             wheelId = jsonObject.getString(Static.number);
             //new Session(this).addString(Static.wheelId,wheelId);
 
@@ -857,8 +857,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             updateSessionCoins(string);
                             totalBatedAmt = totalBatedAmt + bc;
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
-                        } else
-                            H.showMessage(MainActivity.this, json.getString(Static.message));
+                        } /*else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));*/
 
                     }
                 })
@@ -1001,21 +1001,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private void calculateBy1To2() {
             if (winNum % 3 == 0 && findViewById(R.id._thirtyNine).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._thirtyNine)).getText().toString());
-                totalWinAmt = totalWinAmt + (l * 2);
+                totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs1-2Amt", totalWinAmt + "");
                 return;
             }
             List<String> list = Arrays.asList(getResources().getStringArray(R.array.row_two));
             if (list.contains(winNum + "") && findViewById(R.id._thirtyEight).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._thirtyEight)).getText().toString());
-                totalWinAmt = totalWinAmt + (l * 2);
+                totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs2-3Amt", totalWinAmt + "");
                 return;
             }
             list = Arrays.asList(getResources().getStringArray(R.array.row_three));
             if (list.contains(winNum + "") && findViewById(R.id._thirtySeven).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._thirtySeven)).getText().toString());
-                totalWinAmt = totalWinAmt + (l * 2);
+                totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs3-4Amt", totalWinAmt + "");
             }
         }
