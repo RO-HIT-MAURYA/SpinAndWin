@@ -61,12 +61,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String color = "";
     private int totalWinAmt;//used to count win amt from all 6 probability,
     private boolean isInFront = true;
-    private String wheelId="";
+    private String wheelId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loadingDialog = new LoadingDialog(MainActivity.this);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.sound);
 
@@ -80,13 +82,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) findViewById(R.id.coinCount)).setText(string);
             userId = json.getString(Static.UserId);
             assignedUserId = json.getString(Static.AssignedUserId);
+            wheelId = new Session(this).getString("wheelId");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         //setUpGrid(2);
+
+        checkForPendingTask();
         getRecentNumbers();
+    }
+
+    private void checkForPendingTask() {
+        Session session = new Session(this);
+        if (session.getBool("minimizedB4WinNum")) {
+            hitForWinningNumber();
+            hitTotalCoinsById();
+        } else if (session.getBool("minimizedB4WinAmt")) {
+            totalWinAmt = extractInt(session.getString("winAmt"));
+            hitTotalCoinsById();
+        }
+
     }
 
 
@@ -96,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void adjustSeconds() {
         //min = calendar.get(Calendar.MINUTE);
         //final int m = min;
-        loadingDialog = new LoadingDialog(MainActivity.this);
+
         loadingDialog.show("loading...");
         calendar = Calendar.getInstance();
         date = new Date(System.currentTimeMillis());
@@ -208,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void hitForWinningNumber() {
         Json json = new Json();
         json.addString(Static.user_id, userId);
-        json.addString(Static.spin_id,wheelId);
+        json.addString(Static.spin_id, wheelId);
 
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Network not available");
@@ -239,13 +255,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(Json json) {
                         if (json.getString(Static.status).equalsIgnoreCase("100")) {
+                            new Session(MainActivity.this).addBool("minimizedB4WinNum", false);
+                            new Session(MainActivity.this).addBool("minimizedB4WinAmt", true);
+
                             json = json.getJson(Static.data);
                             String winNumber = json.getInt(Static.WinNumber) + "";
-                            String winAmount = json.getInt(Static.WinAmount) + "";
+                            //String winAmount = json.getInt(Static.WinAmount) + "";
                             color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
                             new ApiTask(winNumber);
-                            spinCircle(winNumber, winAmount, color, totalCoins);
+                            new Session(MainActivity.this).addString("winAmt", totalWinAmt + "");
+                            spinCircle(winNumber, color, totalCoins);
 
                         } /*else
                             H.showMessage(MainActivity.this, json.getString(Static.message));*/
@@ -256,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     final float factor = 4.72f;// (360/38)/2;
 
-    private void spinCircle(final String winNumber, final String winAmt, final String color, final int totalCoins) {
+    private void spinCircle(final String winNumber, final String color, final int totalCoins) {
         ImageView imageView = findViewById(R.id.circle);
         //Random random = new Random();
         int degree = 0, oldDegree;
@@ -312,9 +332,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void hitTotalCoinsById() {
         Json json = new Json();
-        json.addString(Static.user_id,userId);
-        json.addString(Static.spin_id,wheelId);
-        json.addString(Static.winning_amount,totalWinAmt+"");
+        json.addString(Static.user_id, userId);
+        json.addString(Static.spin_id, wheelId);
+        json.addString(Static.winning_amount, totalWinAmt + "");
 
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Network not available");
@@ -342,13 +362,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(Json json) {
                         if (json.getString(Static.status).equalsIgnoreCase("100")) {
-                            H.showMessage(MainActivity.this, json.getString(Static.message));
                             json = json.getJson(Static.data);
-
                             int l = json.getInt(Static.TotalCoins);
                             updateSessionCoins(l + "");
                             totalCoins = l;
                             ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
+                            new Session(MainActivity.this).addBool("minimizedB4WinAmt", false);
 
                         } /*else
                             H.showMessage(MainActivity.this, json.getString(Static.message));*/
@@ -610,14 +629,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             JSONArray jsonArray = jsonObject.getJSONArray(Static.data);
             LinearLayout linearLayout = findViewById(R.id.blueLayout);
             for (int i = 0; i < 5; i++) {
-                jsonObject = jsonArray.getJSONObject(i+1);
+                jsonObject = jsonArray.getJSONObject(i + 1);
                 String string = jsonObject.getString(Static.number);
                 if (string != null)
                     ((TextView) linearLayout.getChildAt(i)).setText(string);
             }
             jsonObject = jsonArray.getJSONObject(0);
             wheelId = jsonObject.getString(Static.number);
-            //new Session(this).addString(Static.wheelId,wheelId);
+            new Session(MainActivity.this).addString("wheelId", wheelId);
+            H.log("wheelIdIs", wheelId + "");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -857,6 +877,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             updateSessionCoins(string);
                             totalBatedAmt = totalBatedAmt + bc;
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
+                            new Session(MainActivity.this).addBool("minimizedB4WinNum", true);
                         } /*else
                             H.showMessage(MainActivity.this, json.getString(Static.message));*/
 
@@ -918,12 +939,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*@Override
     protected void onPause() {
         super.onPause();
+        Session session = new Session(this);
+        session.addString("winAmt", totalWinAmt + "");
+        session.addBool("sessionNeeded", true);
+    }*/
 
-        isInFront = false;
-        H.log("cycleIsPause",isInFront+"");
-    }
-
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
 
@@ -970,17 +991,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView) findViewById(R.id._oneTo12)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs1-12Amt", totalWinAmt + "");
-                return;
             } else if (winNum > 12 && winNum < 25 && findViewById(R.id._thirteenTo24).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._thirteenTo24)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs13-24Amt", totalWinAmt + "");
-                return;
             } else if (winNum > 24 && winNum < 37 && findViewById(R.id._twentyFiveTo36).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._twentyFiveTo36)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 3);
                 H.log("apiWinIs25-36Amt", totalWinAmt + "");
-                return;
             }
         }
 
@@ -989,12 +1007,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView) findViewById(R.id._oneTo18)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 2);
                 H.log("apiWinIs1-18Amt", totalWinAmt + "");
-                return;
             } else if (winNum > 18 && winNum < 37 && findViewById(R.id._nineteenTo36).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._nineteenTo36)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 2);
                 H.log("apiWinIs19-36Amt", totalWinAmt + "");
-                return;
             }
         }
 
