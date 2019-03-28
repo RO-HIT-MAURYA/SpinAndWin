@@ -71,8 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadingDialog = new LoadingDialog(MainActivity.this);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.sound);
+        wheelId = new Session(this).getString("wheelId");
 
-        adjustSeconds();
+        //ViewModel viewModel = ViewModelProviders.of(this).get(ScoreViewModel.class);
+
 
         String data = new Session(this).getString(Static.data);
         try {
@@ -82,22 +84,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) findViewById(R.id.coinCount)).setText(string);
             userId = json.getString(Static.UserId);
             assignedUserId = json.getString(Static.AssignedUserId);
-            wheelId = new Session(this).getString("wheelId");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        adjustSeconds();
         //setUpGrid(2);
-
-        checkForPendingTask();
-        getRecentNumbers();
     }
 
     private void checkForPendingTask() {
         Session session = new Session(this);
         if (session.getBool("minimizedB4WinNum")) {
             hitForWinningNumber();
-            hitTotalCoinsById();
+            //hitTotalCoinsById();
         } else if (session.getBool("minimizedB4WinAmt")) {
             totalWinAmt = extractInt(session.getString("winAmt"));
             hitTotalCoinsById();
@@ -128,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }, 60000 - ((sec * 1000) + ms));
 
+        checkForPendingTask();
+        getRecentNumbers();
     }
 
     int i;
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish() {
                 finish();
+                new Session(MainActivity.this).clear();
                 startActivity(getIntent());
                /* if (isInFront) {
                     finish();
@@ -263,7 +265,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //String winAmount = json.getInt(Static.WinAmount) + "";
                             color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
-                            new ApiTask(winNumber);
+                            if (new Session(MainActivity.this).getBool("minimizedB4WinAmt"))
+                                calculateTotalWinAmtForLostConnection(winNumber);
+                            else
+                                new ApiTask(winNumber);
                             new Session(MainActivity.this).addString("winAmt", totalWinAmt + "");
                             spinCircle(winNumber, color, totalCoins);
 
@@ -272,6 +277,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 })
                 .run("winningNumberApi");
+    }
+
+    private void calculateTotalWinAmtForLostConnection(String winNumber)
+    {
+        Session session = new Session(this);
+        int j=0;
+        for (int i=1;i<51;i++)
+        {
+            j = session.getInt(i+"");
+            if (j!=0)
+            {
+                H.log("sessioIs",i+" with value "+ j);
+            }
+
+
+
+        }
+
     }
 
     final float factor = 4.72f;// (360/38)/2;
@@ -635,7 +658,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ((TextView) linearLayout.getChildAt(i)).setText(string);
             }
             jsonObject = jsonArray.getJSONObject(0);
-            wheelId = jsonObject.getString(Static.number);
+            if (wheelId.isEmpty())
+                wheelId = jsonObject.getString(Static.number);
             new Session(MainActivity.this).addString("wheelId", wheelId);
             H.log("wheelIdIs", wheelId + "");
 
@@ -701,8 +725,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = ((TextView) view).getText().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins)
+            if (betAmount > totalCoins) {
                 H.showMessage(this, "You don't have sufficient coins");
+                return;
+            }
             else
                 hitBettingApi(betNumber, betCoin);
         }
@@ -740,8 +766,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = view.getTag().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins)
+            if (betAmount > totalCoins) {
                 H.showMessage(this, "You don't have sufficient coins");
+                return;
+            }
             else
                 hitBettingApi(betNumber, betCoin);
         }
@@ -878,12 +906,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             totalBatedAmt = totalBatedAmt + bc;
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
                             new Session(MainActivity.this).addBool("minimizedB4WinNum", true);
+                            int i = json.getInt("BetNumber");
+                            int j = json.getInt("BetCoin");
+                            controlInternetLost(i, j);
                         } /*else
                             H.showMessage(MainActivity.this, json.getString(Static.message));*/
 
                     }
                 })
                 .run("betting");
+    }
+
+    private void controlInternetLost(int betNum, int betCoin) {
+        Session session = new Session(this);
+        int i = session.getInt(betNum + "");
+        if (i == 0)
+            session.addInt(betNum + "", betCoin);
+        else if (i > 0) {
+            session.addInt(betNum + "", i + betCoin);
+        }
     }
 
     private void updateSessionCoins(String str) {
@@ -957,7 +998,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public class ApiTask {
         int winNum;
 
-        ApiTask(String winNumber) {
+        ApiTask(String winNumber)
+        {
+            totalWinAmt=0;
             try {
                 if (winNumber.equals("00"))
                     winNum = 37;
