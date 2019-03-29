@@ -68,13 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadingDialog = new LoadingDialog(MainActivity.this);
-
         mediaPlayer = MediaPlayer.create(this, R.raw.sound);
-        wheelId = new Session(this).getString("wheelId");
-
-        //ViewModel viewModel = ViewModelProviders.of(this).get(ScoreViewModel.class);
-
 
         String data = new Session(this).getString(Static.data);
         try {
@@ -89,19 +83,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         adjustSeconds();
+
         //setUpGrid(2);
-    }
 
-    private void checkForPendingTask() {
-        Session session = new Session(this);
-        if (session.getBool("minimizedB4WinNum")) {
-            hitForWinningNumber();
-            //hitTotalCoinsById();
-        } else if (session.getBool("minimizedB4WinAmt")) {
-            totalWinAmt = extractInt(session.getString("winAmt"));
+        /*Session session = new Session(MainActivity.this);
+        if (session.getString(Static.wheelId) == null || session.getString(Static.wheelId).isEmpty())
+            getRecentNumbers();
+        else {
+            wheelId = session.getString(Static.wheelId);
+            totalWinAmt = session.getInt(Static.totalBatedAmt);
             hitTotalCoinsById();
-        }
-
+            getRecentNumbers();
+            totalWinAmt = 0;
+        }*/
     }
 
 
@@ -111,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void adjustSeconds() {
         //min = calendar.get(Calendar.MINUTE);
         //final int m = min;
-
+        loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.show("loading...");
         calendar = Calendar.getInstance();
         date = new Date(System.currentTimeMillis());
@@ -127,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }, 60000 - ((sec * 1000) + ms));
 
-        checkForPendingTask();
-        getRecentNumbers();
     }
 
     int i;
@@ -159,12 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish() {
                 finish();
-                new Session(MainActivity.this).clear();
                 startActivity(getIntent());
-               /* if (isInFront) {
-                    finish();
-                    startActivity(getIntent());
-                }*/
             }
         }.start();
     }
@@ -257,19 +244,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(Json json) {
                         if (json.getString(Static.status).equalsIgnoreCase("100")) {
-                            new Session(MainActivity.this).addBool("minimizedB4WinNum", false);
-                            new Session(MainActivity.this).addBool("minimizedB4WinAmt", true);
-
                             json = json.getJson(Static.data);
                             String winNumber = json.getInt(Static.WinNumber) + "";
-                            //String winAmount = json.getInt(Static.WinAmount) + "";
                             color = json.getString(Static.WinNumberColour);
                             totalCoins = json.getInt(Static.TotalCoins);
-                            if (new Session(MainActivity.this).getBool("minimizedB4WinAmt"))
-                                calculateTotalWinAmtForLostConnection(winNumber);
-                            else
-                                new ApiTask(winNumber);
-                            new Session(MainActivity.this).addString("winAmt", totalWinAmt + "");
+                            new ApiTask(winNumber);
                             spinCircle(winNumber, color, totalCoins);
 
                         } /*else
@@ -277,24 +256,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 })
                 .run("winningNumberApi");
-    }
-
-    private void calculateTotalWinAmtForLostConnection(String winNumber)
-    {
-        Session session = new Session(this);
-        int j=0;
-        for (int i=1;i<51;i++)
-        {
-            j = session.getInt(i+"");
-            if (j!=0)
-            {
-                H.log("sessioIs",i+" with value "+ j);
-            }
-
-
-
-        }
-
     }
 
     final float factor = 4.72f;// (360/38)/2;
@@ -386,15 +347,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onSuccess(Json json) {
                         if (json.getString(Static.status).equalsIgnoreCase("100")) {
                             json = json.getJson(Static.data);
+
                             int l = json.getInt(Static.TotalCoins);
                             updateSessionCoins(l + "");
                             totalCoins = l;
                             ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
-                            new Session(MainActivity.this).addBool("minimizedB4WinAmt", false);
 
-                        } /*else
-                            H.showMessage(MainActivity.this, json.getString(Static.message));*/
-
+                            new Session(MainActivity.this).addString(Static.wheelId, "");
+                            new Session(MainActivity.this).addInt(Static.totalBatedAmt, 0);
+                        }
                     }
                 })
                 .run("getTotalCoinsByID");
@@ -658,10 +619,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ((TextView) linearLayout.getChildAt(i)).setText(string);
             }
             jsonObject = jsonArray.getJSONObject(0);
-            if (wheelId.isEmpty())
-                wheelId = jsonObject.getString(Static.number);
-            new Session(MainActivity.this).addString("wheelId", wheelId);
-            H.log("wheelIdIs", wheelId + "");
+            wheelId = jsonObject.getString(Static.number);
+            new Session(this).addString(Static.wheelId, wheelId);//for app minimize or no net
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -725,10 +684,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = ((TextView) view).getText().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins) {
+            if (betAmount > totalCoins)
                 H.showMessage(this, "You don't have sufficient coins");
-                return;
-            }
             else
                 hitBettingApi(betNumber, betCoin);
         }
@@ -766,10 +723,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = view.getTag().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins) {
+            if (betAmount > totalCoins)
                 H.showMessage(this, "You don't have sufficient coins");
-                return;
-            }
             else
                 hitBettingApi(betNumber, betCoin);
         }
@@ -904,27 +859,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             ((TextView) findViewById(R.id.coinCount)).setText(string);
                             updateSessionCoins(string);
                             totalBatedAmt = totalBatedAmt + bc;
+                            new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
-                            new Session(MainActivity.this).addBool("minimizedB4WinNum", true);
-                            int i = json.getInt("BetNumber");
-                            int j = json.getInt("BetCoin");
-                            controlInternetLost(i, j);
+
                         } /*else
                             H.showMessage(MainActivity.this, json.getString(Static.message));*/
 
                     }
                 })
                 .run("betting");
-    }
-
-    private void controlInternetLost(int betNum, int betCoin) {
-        Session session = new Session(this);
-        int i = session.getInt(betNum + "");
-        if (i == 0)
-            session.addInt(betNum + "", betCoin);
-        else if (i > 0) {
-            session.addInt(betNum + "", i + betCoin);
-        }
     }
 
     private void updateSessionCoins(String str) {
@@ -977,30 +920,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /*@Override
-    protected void onPause() {
-        super.onPause();
-        Session session = new Session(this);
-        session.addString("winAmt", totalWinAmt + "");
-        session.addBool("sessionNeeded", true);
-    }*/
-
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-
-        if (!isInFront)
-            startActivity(getIntent());
-        isInFront = true;
-        H.log("cycleIsStart",isInFront+"");
-    }*/
-
     public class ApiTask {
         int winNum;
 
-        ApiTask(String winNumber)
-        {
-            totalWinAmt=0;
+        ApiTask(String winNumber) {
             try {
                 if (winNumber.equals("00"))
                     winNum = 37;
@@ -1084,7 +1007,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int l = extractInt(((TextView) findViewById(R.id._zero)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 36);
                 H.log("apiWinIs0Amt", totalWinAmt + "");
-                return;
             } else if (winNum == 37 && findViewById(R.id._doubleZero).getVisibility() == View.VISIBLE) {
                 int l = extractInt(((TextView) findViewById(R.id._doubleZero)).getText().toString());
                 totalWinAmt = totalWinAmt + (l * 36);
@@ -1117,16 +1039,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 H.log("apiWinIsBlackAmt", totalWinAmt + "");
             }
 
-        }
-
-        private int extractInt(String numString) {
-            int i = 0;
-            try {
-                i = Integer.parseInt(numString);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return i;
         }
 
         private int findId(int i) {
