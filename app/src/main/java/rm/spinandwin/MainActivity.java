@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import rm.spinandwin.helper.Api;
 import rm.spinandwin.helper.H;
 import rm.spinandwin.helper.Json;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         loadingDialog = new LoadingDialog(this);
@@ -629,8 +632,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void onRowOneClick(View view)
-    {
+    public void onRowOneClick(View view) {
         if (view.getId() == R.id.transfer) {
             dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -866,8 +868,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
 
-                        } /*else
-                            H.showMessage(MainActivity.this, json.getString(Static.message));*/
+                        } else if (json.getString(Static.status).equalsIgnoreCase("102"))
+                            H.showMessage(MainActivity.this, json.getString(Static.message));
 
                     }
                 })

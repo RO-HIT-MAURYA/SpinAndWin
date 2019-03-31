@@ -9,6 +9,9 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import rm.spinandwin.helper.Api;
 import rm.spinandwin.helper.H;
 import rm.spinandwin.helper.Json;
@@ -24,6 +27,7 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_log_in);
 
         loadingDialog = new LoadingDialog(this);
