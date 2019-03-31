@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String betNumber;
     private RelativeLayout relativeLayout;
     private TextView textView;
-    private MediaPlayer mediaPlayer;
     private String color = "";
     private int totalWinAmt;//used to count win amt from all 6 probability,
     private boolean isInFront = true;
@@ -68,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.sound);
+        loadingDialog = new LoadingDialog(this);
+        loadingDialog.show("loading...");
 
         String data = new Session(this).getString(Static.data);
         try {
@@ -82,22 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
             e.printStackTrace();
         }
-        adjustSeconds();
-
         //setUpGrid(2);
 
-        /*Session session = new Session(MainActivity.this);
-        if (session.getString(Static.wheelId) == null || session.getString(Static.wheelId).isEmpty())
-            getRecentNumbers();
-        else {
-            wheelId = session.getString(Static.wheelId);
-            totalWinAmt = session.getInt(Static.totalBatedAmt);
-            hitTotalCoinsById();
-            getRecentNumbers();
-            totalWinAmt = 0;
-        }*/
+        adjustSeconds();
     }
-
 
     Calendar calendar;
     Date date;
@@ -105,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void adjustSeconds() {
         //min = calendar.get(Calendar.MINUTE);
         //final int m = min;
-        loadingDialog = new LoadingDialog(MainActivity.this);
-        loadingDialog.show("loading...");
+
         calendar = Calendar.getInstance();
         date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
@@ -116,11 +103,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                loadingDialog.hide();
+                loadingDialog.dismiss();
                 showTimerOnScreen();
             }
         }, 60000 - ((sec * 1000) + ms));
 
+        Session session = new Session(MainActivity.this);
+        if (session.getString(Static.wheelId) == null || session.getString(Static.wheelId).isEmpty())
+            getRecentNumbers();
+        else {
+            wheelId = session.getString(Static.wheelId);
+            totalWinAmt = session.getInt(Static.totalBatedAmt);
+            hitTotalCoinsById();
+            totalWinAmt = 0;
+            wheelId = "";
+            getRecentNumbers();
+        }
     }
 
     int i;
@@ -281,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mediaPlayer.start();
+                MediaPlayer.create(MainActivity.this, R.raw.sound).start();
                 textView.setText("");
             }
 
@@ -329,11 +327,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setMethod(Api.POST)
                 .onLoading(new Api.OnLoadingListener() {
                     @Override
-                    public void onLoading(boolean isLoading) {
+                    public void onLoading(boolean isLoading)
+                    {
+/*
+                        LoadingDialog ld = new LoadingDialog(MainActivity.this);
                         if (isLoading)
-                            loadingDialog.show("loading...");
+                            ld.show("loading...");
                         else
-                            loadingDialog.dismiss();
+                            ld.dismiss();
+*/
                     }
                 })
                 .onError(new Api.OnErrorListener() {
@@ -708,7 +710,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         H.log("betCoinIs", betCoin);
         H.log("betNumIs", betNumber);
-
     }
 
     public void onBorderClick(View view) {
@@ -758,8 +759,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (l > totalCoins) {
                 H.showMessage(this, "You don't have sufficient totalCoins");
                 return;
-            } else
-                hitTransferCoinApi(l);
+            }
+            hitTransferCoinApi(l);
         } catch (Exception e) {
             e.printStackTrace();
         }
