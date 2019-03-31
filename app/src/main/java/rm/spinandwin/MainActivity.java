@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private String color = "";
     private int totalWinAmt;//used to count win amt from all 6 probability,
-    private boolean isInFront = true;
     private String wheelId = "";
     private CountDownTimer countDownTimer;
+    private View views;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -677,7 +677,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void on1To36Click(View view) {
+    int k=0;
+    public void on1To36Click(View view)
+    {
+        views = view;
+        view.setEnabled(false);
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Internet connection required");
@@ -700,14 +704,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
         Object tag = textView.getTag();
-        H.log("tagIs", tag + "");
+
+        k++;//wheever key is pressed
         if (tag == null) {
             textView.setTag(betAmount);
             textView.setText(betAmount + "");
         } else {
+            H.log("tagIs", tag + "");
             int i = (int) textView.getTag() + betAmount;
             textView.setTag(i);
             textView.setText(i + "");
+            views.setEnabled(false);
         }
 
         //int i =0;
@@ -717,6 +724,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBorderClick(View view) {
+        views = view;//to avoid betting coin more than total coin
+        view.setEnabled(false);
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Internet connection required");
@@ -867,6 +876,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             totalBatedAmt = totalBatedAmt + bc;
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
+                            views.setEnabled(true);
 
                         } else if (json.getString(Static.status).equalsIgnoreCase("102"))
                             H.showMessage(MainActivity.this, json.getString(Static.message));

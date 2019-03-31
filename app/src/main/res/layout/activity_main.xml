@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_semi_bold"
                     android:padding="3dp"
-                    android:text="99999"
+                    android:text="000"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold" />
