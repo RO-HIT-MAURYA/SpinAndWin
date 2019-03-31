@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int totalWinAmt;//used to count win amt from all 6 probability,
     private String wheelId = "";
     private CountDownTimer countDownTimer;
-    private View views;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     loadingDialog.show();
                 if (i == 0) {
                     loadingDialog.hide();
-                    disableBetAmtRow();
+                    enbleAllViews(false);
                     hitForWinningNumber();
                 }
                 if (i <= 10)
@@ -158,47 +157,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }.start();
     }
 
-    private void disableBetAmtRow() {
+    private void enbleAllViews(boolean visibilityStatus)//bool is used to avoid multiple tap problem
+    {
         LinearLayout linearLayout = findViewById(R.id.topMostRow);
         RelativeLayout relativeLayout;
         for (int i = 0; i < linearLayout.getChildCount(); i++)//for bet amt row
         {
-            linearLayout.getChildAt(i).setEnabled(false);
+            linearLayout.getChildAt(i).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.lL1);
         for (int i = 1; i < linearLayout.getChildCount(); i++) // for 1-18 & 19-36 row
         {
             relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
-            relativeLayout.getChildAt(1).setEnabled(false);
+            relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.lL2);
         for (int i = 0; i < linearLayout.getChildCount(); i++) //for  3: 1 to 3
         {
             relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
-            relativeLayout.getChildAt(1).setEnabled(false);
+            relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.lL3);
         for (int i = 0; i < linearLayout.getChildCount(); i++) // for 0 & 00
         {
             relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
-            relativeLayout.getChildAt(1).setEnabled(false);
+            relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.lL4);
         for (int i = 1; i < linearLayout.getChildCount(); i++) // for 1-12 row
         {
             relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
-            relativeLayout.getChildAt(1).setEnabled(false);
+            relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.lL5);
         for (int i = 1; i < linearLayout.getChildCount(); i++) // for even odd row
         {
             relativeLayout = (RelativeLayout) linearLayout.getChildAt(i);
-            relativeLayout.getChildAt(1).setEnabled(false);
+            relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
         }
 
         linearLayout = findViewById(R.id.parentLayout);
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             childLayout = (LinearLayout) linearLayout.getChildAt(i);
             for (int j = 0; j < childLayout.getChildCount(); j++) {
                 relativeLayout = (RelativeLayout) childLayout.getChildAt(j);
-                relativeLayout.getChildAt(1).setEnabled(false);
+                relativeLayout.getChildAt(1).setEnabled(visibilityStatus);
             }
         }
     }
@@ -680,8 +680,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int k=0;
     public void on1To36Click(View view)
     {
-        views = view;
-        view.setEnabled(false);
+        enbleAllViews(false);
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Internet connection required");
@@ -700,6 +699,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             hitBettingApi(betNumber, betCoin);
         }
 
+
         relativeLayout = (RelativeLayout) view.getParent();
         textView = (TextView) relativeLayout.getChildAt(0);
         textView.setVisibility(View.VISIBLE);
@@ -714,7 +714,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int i = (int) textView.getTag() + betAmount;
             textView.setTag(i);
             textView.setText(i + "");
-            views.setEnabled(false);
         }
 
         //int i =0;
@@ -724,13 +723,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBorderClick(View view) {
-        views = view;//to avoid betting coin more than total coin
-        view.setEnabled(false);
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Internet connection required");
             return;
         }
+        enbleAllViews(false);
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
@@ -876,7 +874,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             totalBatedAmt = totalBatedAmt + bc;
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
-                            views.setEnabled(true);
+                            enbleAllViews(true);
 
                         } else if (json.getString(Static.status).equalsIgnoreCase("102"))
                             H.showMessage(MainActivity.this, json.getString(Static.message));
