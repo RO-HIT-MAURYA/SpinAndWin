@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int totalWinAmt;//used to count win amt from all 6 probability,
     private boolean isInFront = true;
     private String wheelId = "";
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadingDialog.findViewById(R.id.loadingDialog).setVisibility(View.INVISIBLE);
         loadingDialog.findViewById(R.id.msg).setVisibility(View.INVISIBLE);
         final TextView textView = findViewById(R.id.spineTime);
-        CountDownTimer countDownTimer = new CountDownTimer(59000, 1000) {
+        countDownTimer = new CountDownTimer(59000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 i = (int) (millisUntilFinished / 1000) - 10;
@@ -644,10 +645,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adb.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Session(MainActivity.this).clear();
-                    Intent intent = new Intent(MainActivity.this, LogInActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    //new Session(MainActivity.this).clear();
+                    //Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //startActivity(intent);
                     finish();
                 }
             });
@@ -899,6 +900,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.close)
             dialog.hide();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null)
+            countDownTimer.cancel();
     }
 
     @Override
