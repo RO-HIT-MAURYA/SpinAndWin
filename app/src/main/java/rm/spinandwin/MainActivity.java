@@ -328,8 +328,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setMethod(Api.POST)
                 .onLoading(new Api.OnLoadingListener() {
                     @Override
-                    public void onLoading(boolean isLoading)
-                    {
+                    public void onLoading(boolean isLoading) {
 /*
                         LoadingDialog ld = new LoadingDialog(MainActivity.this);
                         if (isLoading)
@@ -687,10 +686,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = ((TextView) view).getText().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins)
+            if (betAmount > totalCoins) {
                 H.showMessage(this, "You don't have sufficient coins");
-            else
-                hitBettingApi(betNumber, betCoin);
+                return;
+            }
+            hitBettingApi(betNumber, betCoin);
         }
 
         relativeLayout = (RelativeLayout) view.getParent();
@@ -725,10 +725,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         betNumber = view.getTag().toString();
 
         if (!betCoin.isEmpty() && !betNumber.isEmpty()) {
-            if (betAmount > totalCoins)
+            if (betAmount > totalCoins) {
                 H.showMessage(this, "You don't have sufficient coins");
-            else
-                hitBettingApi(betNumber, betCoin);
+                return;
+            }
+            hitBettingApi(betNumber, betCoin);
         }
 
         relativeLayout = (RelativeLayout) view.getParent();
@@ -905,7 +906,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (countDownTimer!=null)
+        if (countDownTimer != null)
             countDownTimer.cancel();
     }
 
