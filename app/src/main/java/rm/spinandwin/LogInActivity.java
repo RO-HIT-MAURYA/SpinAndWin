@@ -63,7 +63,7 @@ public class LogInActivity extends AppCompatActivity {
     {
         if (!H.isInternetAvailable(this))
         {
-            H.showMessage(this,"Network not available");
+            H.showMessage(this,"Internet connection required");
             return;
         }
         Api.newApi(this, Static.baseUrl + "GamerLogin").addJson(json)

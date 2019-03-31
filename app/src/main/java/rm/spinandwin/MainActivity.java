@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         json.addString(Static.spin_id, wheelId);
 
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         json.addString(Static.winning_amount, totalWinAmt + "");
 
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getRecentNumbers() {
 
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
@@ -608,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setBlueLayoutData(JSONObject jsonObject) {
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
@@ -678,7 +678,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void on1To36Click(View view) {
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
         H.log("clickIs", ((TextView) view).getText().toString());
@@ -716,7 +716,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBorderClick(View view) {
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
         H.log("borderClickIs", view.getTag().toString());
@@ -751,7 +751,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onTransferClick(View view) {
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
         String string = ((EditText) dialog.findViewById(R.id.transferAmount)).getText().toString();
@@ -776,7 +776,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         json.addString(Static.coins, "" + l);
 
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
@@ -828,7 +828,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bc = extractInt(bC);
 
         if (!H.isInternetAvailable(this)) {
-            H.showMessage(this, "Network not available");
+            H.showMessage(this, "Internet connection required");
             return;
         }
 
