@@ -53,19 +53,18 @@
         android:layout_marginLeft="35dp"
         android:hint="Transfer Coin to Distributor"
         android:inputType="numberSigned"
-        android:onClick="onTransferClick"
         android:padding="8dp"
         android:layout_marginRight="35dp"
         android:layout_marginBottom="15dp"
         android:background="@color/white"/>
 
     <TextView
-        android:id="@+id/transfer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:onClick="onTransferClick"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_gravity="center_horizontal"

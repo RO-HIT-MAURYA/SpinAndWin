@@ -629,14 +629,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void onRowOneClick(View view) {
+    public void onRowOneClick(View view)
+    {
         if (view.getId() == R.id.transfer) {
             dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.transfer_layout);
 
             dialog.findViewById(R.id.close).setOnClickListener(this);
-            dialog.findViewById(R.id.transfer).setOnClickListener(this);
+            //dialog.findViewById(R.id.transfer).setOnClickListener(this);
             dialog.show();
         } else if (view.getId() == R.id.logout) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
