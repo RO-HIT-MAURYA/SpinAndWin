@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .onError(new Api.OnErrorListener() {
                     @Override
                     public void onError() {
-                        H.showMessage(MainActivity.this, "Something went wrong.");
+                        H.showMessage(MainActivity.this, "Poor internet connection");
                     }
                 })
                 .onSuccess(new Api.OnSuccessListener() {
@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .onError(new Api.OnErrorListener() {
                     @Override
                     public void onError() {
-                        H.showMessage(MainActivity.this, "Something went wrong.");
+                        H.showMessage(MainActivity.this, "Poor internet connection");
                     }
                 })
                 .onSuccess(new Api.OnSuccessListener() {
@@ -805,7 +805,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .onError(new Api.OnErrorListener() {
                     @Override
                     public void onError() {
-                        H.showMessage(MainActivity.this, "Something went wrong.");
+                        H.showMessage(MainActivity.this, "Poor internet connection");
                     }
                 })
                 .onSuccess(new Api.OnSuccessListener() {
@@ -857,7 +857,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .onError(new Api.OnErrorListener() {
                     @Override
                     public void onError() {
-                        H.showMessage(MainActivity.this, "Something went wrong.");
+                        H.showMessage(MainActivity.this, "Poor internet connection");
                     }
                 })
                 .onSuccess(new Api.OnSuccessListener() {
