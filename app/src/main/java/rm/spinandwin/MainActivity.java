@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //setUpGrid(2);
 
         adjustSeconds();
+        totalWinAmt = new Session(this).getInt(Static.totalBatedAmt) ;
+        wheelId = new Session(this).getString(Static.wheelId);
+        hitTotalCoinsById();
     }
 
     Calendar calendar;
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }, 60000 - ((sec * 1000) + ms));
 
-        Session session = new Session(MainActivity.this);
+        /*Session session = new Session(MainActivity.this);
         if (session.getString(Static.wheelId) == null || session.getString(Static.wheelId).isEmpty())
             getRecentNumbers();
         else {
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             totalWinAmt = 0;
             wheelId = "";
             getRecentNumbers();
-        }
+        }*/
     }
 
     int i;
@@ -358,8 +361,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             totalCoins = l;
                             ((TextView) findViewById(R.id.coinCount)).setText("" + totalCoins);
 
-                            new Session(MainActivity.this).addString(Static.wheelId, "");
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, 0);
+
+                            getRecentNumbers();
                         }
                     }
                 })
@@ -873,6 +877,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             updateSessionCoins(string);
                             totalBatedAmt = totalBatedAmt + bc;
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
+                            new Session(MainActivity.this).addString(Static.wheelId,wheelId);
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
                             enbleAllViews(true);
 
