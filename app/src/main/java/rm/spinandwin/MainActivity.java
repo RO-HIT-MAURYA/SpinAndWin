@@ -21,10 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -33,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //setUpGrid(2);
 
         adjustSeconds();
-        totalWinAmt = new Session(this).getInt(Static.totalBatedAmt) ;
+        totalWinAmt = new Session(this).getInt(Static.totalBatedAmt);
         wheelId = new Session(this).getString(Static.wheelId);
         hitTotalCoinsById();
     }
@@ -143,9 +147,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     loadingDialog.show();
                 if (i == 0) {
                     loadingDialog.hide();
-                    enbleAllViews(false);
+                    enableAllViews(false);
                     hitForWinningNumber();
                 }
+                if (i == 9)
+                    callExtraApi();
                 if (i <= 10)
                     textView.setTextColor(getResources().getColor(R.color.red));
                 if (i >= 0)
@@ -160,7 +166,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }.start();
     }
 
-    private void enbleAllViews(boolean visibilityStatus)//bool is used to avoid multiple tap problem
+    private void callExtraApi() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, "http://globaloperationsontime.spinwheels.info/OperationsOnTime/GetGlobalWinNumber", new JSONObject(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            H.log("extraApi", response.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        H.log("extraApiErrorIs", error.toString());
+                    }
+
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void enableAllViews(boolean visibilityStatus)//bool is used to avoid multiple tap problem
     {
         LinearLayout linearLayout = findViewById(R.id.topMostRow);
         RelativeLayout relativeLayout;
@@ -681,10 +711,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    int k=0;
-    public void on1To36Click(View view)
-    {
-        enbleAllViews(false);
+    int k = 0;
+
+    public void on1To36Click(View view) {
+        enableAllViews(false);
         // MediaPlayer.create(this, R.raw.keyclick).start();
         if (!H.isInternetAvailable(this)) {
             H.showMessage(this, "Internet connection required");
@@ -732,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             H.showMessage(this, "Internet connection required");
             return;
         }
-        enbleAllViews(false);
+        enableAllViews(false);
         H.log("borderClickIs", view.getTag().toString());
         //H.showMessage(this, view.getTag().toString());
 
@@ -877,9 +907,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             updateSessionCoins(string);
                             totalBatedAmt = totalBatedAmt + bc;
                             new Session(MainActivity.this).addInt(Static.totalBatedAmt, totalBatedAmt);//for app minimize of no net
-                            new Session(MainActivity.this).addString(Static.wheelId,wheelId);
+                            new Session(MainActivity.this).addString(Static.wheelId, wheelId);
                             ((TextView) findViewById(R.id.betAmt)).setText(totalBatedAmt + "");
-                            enbleAllViews(true);
+                            enableAllViews(true);
 
                         } else if (json.getString(Static.status).equalsIgnoreCase("102"))
                             H.showMessage(MainActivity.this, json.getString(Static.message));
