@@ -195,11 +195,11 @@ public class H {
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
             //we are connected to a network
             connected = true;
-            H.log("connected",""+connected);
+            //H.log("connected",""+connected);
         }
         else
             connected = false;
-        H.log("connected",""+connected);
+        H.log("isInternetAvailable",""+connected);
 
 
         return connected;
