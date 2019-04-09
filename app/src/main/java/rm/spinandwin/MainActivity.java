@@ -166,28 +166,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }.start();
     }
 
-    private void callExtraApi() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, "http://globaloperationsontime.spinwheels.info/OperationsOnTime/GetGlobalWinNumber", new JSONObject(), new Response.Listener<JSONObject>() {
+    private void callExtraApi()
+    {
+        Json json = new Json();
+        json.addString(Static.spin_id,wheelId);
+
+        Api.newApi(this, Static.baseUrl + "SpinNumber").addJson(json)
+                .setMethod(Api.POST)
+                .onLoading(new Api.OnLoadingListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            H.log("extraApi", response.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    public void onLoading(boolean isLoading) {
+                        if (isLoading)
+                            loadingDialog.show("loading...");
+                        else
+                            loadingDialog.dismiss();
                     }
-                }, new Response.ErrorListener() {
+                })
+                .onError(new Api.OnErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        H.log("extraApiErrorIs", error.toString());
+                    public void onError() {
+                        H.showMessage(MainActivity.this, "Poor internet connection");
                     }
+                })
+                .onSuccess(new Api.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Json json) {
+                        if (json.getString(Static.status).equalsIgnoreCase("100")) {
 
-                });
+                        } else
+                            H.showMessage(MainActivity.this, json.getString(Static.message));
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        requestQueue.add(jsonObjectRequest);
+                    }
+                })
+                .run("extraApi");
     }
 
     private void enableAllViews(boolean visibilityStatus)//bool is used to avoid multiple tap problem
